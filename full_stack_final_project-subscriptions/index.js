@@ -1,10 +1,15 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./configs/db.js");
+const bodyParser = require('body-parser');
+const initDBOnLoad = require("./configs/initDB.js");
+const membersRoutes = require('./routes/members.js');
+const moviesRoutes = require('./routes/movie.js');
+const subscriptionsRoutes = require('./routes/subscriptions.js');
+
 const app = express();
 const PORT = process.env.PORT;
-const initDBOnLoad = require("./configs/initDB.js");
-
 connectDB();
 
 app.use(
@@ -15,21 +20,13 @@ app.use(
     credentials: true, // If you need to allow cookies
   })
 );
+app.use(bodyParser.json());
+app.use('/api/members', membersRoutes);
+app.use('/api/movies', moviesRoutes);
+app.use('/api/subscriptions', subscriptionsRoutes);
 
-app.use("/", express.json());
-// app.use("/auth", authController);
-// app.use("/shifts", authenticateToken, shiftsController);
-// app.use("/employees", authenticateToken, employeesController);
-// app.use("/department", authenticateToken, departmentController);
-// app.use("/data", data);
-// app.use("/users", authenticateToken, usersController);
-// app.use("/allowActions", authenticateToken, actionsAllowedController);
 
 app.listen(PORT, () => {
   console.log(`app is listening at http://localhost:${PORT}`);
   initDBOnLoad()
 });
-
-// https://api.tvmaze.com/shows
-// https://jsonplaceholder.typicode.com/users
-

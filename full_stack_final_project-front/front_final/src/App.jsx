@@ -1,22 +1,21 @@
 import "./App.css";
-import { Routes, Route } from "react-router";
-import Login from "./login";
-// import MainComp from "./mainComp";
-// import NewEmployeeComp from "./system/employees/newEmployeeComp";
-// import NewDepartmentComp from "./system/department/newDepartmentComp";
-// import UsersComp from "./system/users/usersComp";
-// import SignOutComp from "./system/signout";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import Login from "./login/login";
+import MainComp from "./mainPage/mainComponent";
+import LogOutComp from "./logout/logout";
+import RegisterComp from "./register/RegisterComp";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      {/* <Route path="/main_page" element={<MainComp />} />
-      <Route path="/employee" element={<NewEmployeeComp />} />
-      <Route path="/department" element={<NewDepartmentComp />} />
-      <Route path="/users" element={<UsersComp />} />
-      <Route path="/signout" element={<SignOutComp />} /> */}
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterComp />} />
+        <Route path="/main_page" element={<MainComp />} />
+        <Route path="/signout" element={<LogOutComp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

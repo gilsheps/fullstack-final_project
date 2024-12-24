@@ -1,1 +1,13 @@
-{ "1": [1, 2, 3, 4, 5, 6], "2": [1, 2, 4, 5] }
+{
+  "6763e942d59aac1893527506": [
+    "View Subscriptions",
+    "Create Subscriptions",
+    "Delete Subscriptions",
+    "Update Subscription",
+    "View Movies",
+    "Create Movies",
+    "Delete Movies",
+    "Update Movie"
+  ],
+  "2": [1, 2, 4, 5]
+}

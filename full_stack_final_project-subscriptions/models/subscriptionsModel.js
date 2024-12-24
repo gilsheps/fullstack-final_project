@@ -1,13 +1,9 @@
 const mongoose = require("mongoose");
 
-const departmentSchema = new mongoose.Schema({
-  name: String,
+const subscriptionSchema = new mongoose.Schema({
   memberId: { type: mongoose.Schema.Types.ObjectId, ref: "Members" },
-  movies: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Movies" },
-    { type: Date },
-  ],
+  movies: [{ movieId: mongoose.Schema.Types.ObjectId, date: Date }]
 });
 
-const Department = mongoose.model("Department", departmentSchema);
-module.exports = Department;
+const Subscription = mongoose.model("Subscription", subscriptionSchema);
+module.exports = Subscription;

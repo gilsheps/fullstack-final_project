@@ -1,45 +1,41 @@
-// const userRepo = require("../repositories/userRepo.js");
+const User = require("../models/userModel");
 
-// const getAllUsers = (filters) => {
-//   return userRepo.getAllUsers(filters);
-// };
+const getAllUsers = async (filters) => {
+  console.log("filters", filters);
+  const users = await User.find(filters);
+  users.shift();
+  return users;
+};
+const getUserByUsername = async (username) => {
+  return await User.findOne({ username });
+};
 
-// const getUsersFromJh = () => {
-//   return userRepo.getUsersFromJh();
-// };
+const addUser = async (username, password) => {
+  const user = new User({ username, password });
+  return await user.save();
+};
 
-// const getById = (id) => {
-//   return userRepo.getById(id);
-// };
+const updateUser = async (id, updatedUser) => {
+  return await User.findByIdAndUpdate(id, updatedUser, { new: true });
+};
 
-// const getId = (name) => {
-//   return userRepo.getId(name);
-// };
+const deleteUser = async (id) => {
+  return await User.findByIdAndDelete(id);
+};
 
-// const addUser = (obj) => {
-//   return userRepo.addUser(obj);
-// };
+const firstLogin = async (username, password) => {
+  const filter = { username: username };
+  const update = { password: password };
+  return await User.findOneAndUpdate(filter, update, {
+    new: true,
+  });
+};
 
-// const updateUser = (id, obj) => {
-//   return userRepo.updateUser(id, obj);
-// };
-
-// const deleteUser = (id) => {
-//   return userRepo.deleteUser(id);
-// };
-
-// const isUserExists = async (username, email) => {
-//   const { data } = await getUsersFromJh();
-//   return data.filter((obj) => obj.name == username && obj.email == email);
-// };
-
-// module.exports = {
-//   getAllUsers,
-//   getById,
-//   addUser,
-//   updateUser,
-//   deleteUser,
-//   getUsersFromJh,
-//   isUserExists,
-//   getId,
-// };
+module.exports = {
+  getAllUsers,
+  addUser,
+  updateUser,
+  getUserByUsername,
+  deleteUser,
+  firstLogin,
+};
