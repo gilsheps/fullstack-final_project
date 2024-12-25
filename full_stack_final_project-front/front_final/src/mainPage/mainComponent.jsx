@@ -7,7 +7,7 @@ import SubscriptionsComp from "../subscriptions/subscriptionsComp";
 import ManagementComp from "../users/managementComp";
 
 export default function MainComponent() {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("3");
 
   useEffect(() => {
     let valueFromStorage = localStorage.getItem("newValue");

@@ -6,5 +6,12 @@
     "username" :"admin",
     "createDate": "2019-01-01",
     "sessionTimeOut": 60
+  },{
+    "id": "6767dea325d5493b6ffbbae5",
+    "firstName": "user",
+    "lastName": "user",
+    "username" :"user_1",
+    "createDate": "2019-01-01",
+    "sessionTimeOut": 60
   }
 ]

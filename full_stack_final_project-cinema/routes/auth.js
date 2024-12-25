@@ -1,58 +1,68 @@
 require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcrypt");
 const userServices = require("../services/userService");
+const { createSecretToken } = require("../tokenGeneration/generateToken.js");
 const router = express.Router();
-
-// Register user
-router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    userServices.addUser({ username, password });
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+const SECRET_KEY = "some_key";
+const TOKEN_EXPIRATION = "5m";
 
 // Login user
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log("login", username, password);
-  console.log("JWT_SECRET", process.env.JWT_SECRET);
-  try {
-    const user = await userServices.getUserByUsername(username);
-    console.log("user", user);
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
-    // const isMatch = await user.matchPassword(password);
-    // if (!isMatch)
-    //   return res.status(400).json({ message: "Invalid credentials" });
-
-    // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    //   expiresIn: "5m",
-    // });
-    // res.json({ token });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  console.log("username", username, "password", password);
+  if (!(username && password)) {
+    return res.status(400).json({ message: "All input is required" });
   }
+  const user = await userServices.getUserByUsername(username);
+  console.log("user", user);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  bcrypt.compare(password, user.password, (err, isMatch) => {
+    if (err) {
+      console.error(err);
+      return res.status(404).json({ message: "Invalid credentials" });
+    }
+    if (isMatch) {
+      console.log("Password matches!");
+    } else {
+      console.log("Password does not match!");
+    }
+  });
+  const token = createSecretToken(user._id);
+  // res.cookie("token", token, {
+  //   domain: process.env.frontend_url, // Set your domain here
+  //   path: "/", // Cookie is accessible from all paths
+  //   expires: TOKEN_EXPIRATION, //new Date(Date.now() + 86400000), // Cookie expires in 1 day
+  //   secure: true, // Cookie will only be sent over HTTPS
+  //   httpOnly: true, // Cookie cannot be accessed via client-side scripts
+  //   sameSite: "None",
+  // });
+  console.log("token", token);
+  res.json({
+    success: true,
+    message: "Login successful",
+    user: { id: user._id, username: user.username },
+    token,
+  });
 });
 
-// // Protected route
-// router.get("/profile", async (req, res) => {
-//   const token = req.header("Authorization")?.replace("Bearer ", "");
-//   if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     const user = await User.findById(decoded.id).select("-password");
-//     console.log("user", user,"decoded",decoded);
-//     if (!user) return res.status(404).json({ message: "User not found" });
-//     res.json(user);
-//   } catch (error) {
-//     res.status(401).json({ message: "Invalid token" });
-//   }
-// });
+// Register user
+router.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await userServices.getUserByUsername(username);
+  console.log("user", user);
+  if (user) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashedPassword", hashedPassword);
+    await userServices.firstLogin(username, password);
+    res.status(201).send(`User ${username} updated successfully`);
+  } else {
+    return res.status(400).json({ message: `User ${username} not exists` });
+  }
+});
 
 module.exports = router;

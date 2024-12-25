@@ -12,30 +12,59 @@ import {
   Typography,
 } from "@mui/material";
 import { Card, SignInContainer } from "../shared-theme/CardAndContainer";
+import { loginSuccess } from "../redux/authSlice";
+import { setSessionTimeout, startCountdown } from '../redux/sessionSlice';
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
   const [nameError, setNameError] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post(`${BASE_AUTH}login`, {
-      username: username || e.target.username.defaultValue,
-      password: password || e.target.password.defaultValue,
-    });
-
-    if (res.status === 200) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
+    console.log("nameError", nameError);
+    if (nameError) {
+      setNameError(true);
+    } else {
+      try {
+        const res = await axios.post(`${BASE_AUTH}login`, {
           username: username || e.target.username.defaultValue,
-          token: res.data.token,
-        })
-      );
-      navigate("/main_page", { replace: true });
+          password: password || e.target.password.defaultValue,
+        });
+
+        const data = res.data;
+        console.log("success successsuccesssuccess");
+        dispatch(loginSuccess({ user: data.user, token: data.token }));
+        // dispatch(setSessionTimeout(user)); // Set session timeout
+        // dispatch(startCountdown()); 
+        navigate("/main_page", { replace: true });
+      } catch (error) {
+        // setNameError(true);
+        console.log("error", error);
+      }
+      console.log("nameError in the end", nameError);
     }
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       username: username || e.target.username.defaultValue,
+    //       token: res.data.token,
+    //     })
+    //   );
+    //   navigate("/main_page", { replace: true });
+    // }
+  };
+
+  const handleNameChange = (e) => {
+    setUserName(e.target.value || e.target.username.defaultValue);
+    setNameError(false);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value|| e.target.password.defaultValue);
+    setNameError(false);
   };
 
   return (
@@ -73,10 +102,10 @@ export default function Login() {
               required
               fullWidth
               variant="outlined"
-              sx={{ ariaLabel: "email" }}
+              sx={{ ariaLabel: "username" }}
               defaultValue="admin"
-              onChange={() => setUserName(e.target.value)}
-              helperText={nameError ? "Please enter your email" : ""}
+              onChange={handleNameChange}
+              helperText={nameError ? "Check your username" : ""}
             />
           </FormControl>
           <FormControl>
@@ -91,7 +120,8 @@ export default function Login() {
               fullWidth
               variant="outlined"
               defaultValue="1234"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
+              helperText={nameError ? "Check your password" : ""}
             />
           </FormControl>
           <Button type="submit" fullWidth variant="contained">
@@ -110,7 +140,7 @@ export default function Login() {
             </span>
           </Typography>
         </Box>
-      </Card> 
+      </Card>
     </SignInContainer>
   );
 }
