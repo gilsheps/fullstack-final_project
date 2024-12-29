@@ -1,8 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-const BASE_SERVER_URL = "http://localhost:3005/api";
-const BASE_AUTH = `${BASE_SERVER_URL}/auth/`;
 import {
   Box,
   Button,
@@ -14,7 +12,10 @@ import {
 import { Card, SignInContainer } from "../shared-theme/CardAndContainer";
 import { loginSuccess } from "../redux/authSlice";
 import { setSessionTimeout, startCountdown } from '../redux/sessionSlice';
-import { useDispatch } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+
+const BASE_SERVER_URL = "http://localhost:3005/api";
+const BASE_AUTH = `${BASE_SERVER_URL}/auth/`;
 
 export default function Login() {
   const [username, setUserName] = useState();
@@ -22,6 +23,8 @@ export default function Login() {
   const [nameError, setNameError] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.authSlice);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,21 +43,14 @@ export default function Login() {
         dispatch(loginSuccess({ user: data.user, token: data.token }));
         // dispatch(setSessionTimeout(user)); // Set session timeout
         // dispatch(startCountdown()); 
-        navigate("/main_page", { replace: true });
+        console.log("user", user);
+        // navigate("/main_page", { replace: true });
       } catch (error) {
         // setNameError(true);
         console.log("error", error);
       }
       console.log("nameError in the end", nameError);
     }
-    //   localStorage.setItem(
-    //     "user",
-    //     JSON.stringify({
-    //       username: username || e.target.username.defaultValue,
-    //       token: res.data.token,
-    //     })
-    //   );
-    //   navigate("/main_page", { replace: true });
     // }
   };
 

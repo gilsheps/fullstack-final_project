@@ -1,19 +1,25 @@
-{
-  "6763e942d59aac1893527506": [
-    "View Subscriptions",
-    "Create Subscriptions",
-    "Delete Subscriptions",
-    "Update Subscription",
-    "View Movies",
-    "Create Movies",
-    "Delete Movies",
-    "Update Movie"
-  ],
-  "6767dea325d5493b6ffbbae5": [
-    "View Subscriptions",
-    "Create Subscriptions",
-    "Delete Subscriptions",
-    "Update Subscription",
-    "View Movies"
-  ]
-}
+[
+  {
+    "id": "6763e942d59aac1893527506",
+    "permissions": [
+      "View Subscriptions",
+      "Create Subscriptions",
+      "Delete Subscriptions",
+      "Update Subscription",
+      "View Movies",
+      "Create Movies",
+      "Delete Movies",
+      "Update Movie"
+    ]
+  },
+  {
+    "id": "6767dea325d5493b6ffbbae5",
+    "permissions": [
+      "View Subscriptions",
+      "Create Subscriptions",
+      "Delete Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
+  }
+]
