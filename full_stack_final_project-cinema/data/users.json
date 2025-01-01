@@ -3,14 +3,31 @@
     "id": "6763e942d59aac1893527506",
     "firstName": "John",
     "lastName": "Doe",
-    "username" :"admin",
+    "username": "admin",
     "createDate": "2019-01-01",
     "sessionTimeOut": 60
-  },{
+  },
+  {
     "id": "6767dea325d5493b6ffbbae5",
-    "firstName": "user",
+    "firstName": "user_1",
     "lastName": "user",
-    "username" :"user_1",
+    "username": "user_1",
+    "createDate": "2019-01-01",
+    "sessionTimeOut": 60
+  },
+  {
+    "id": "6771733a5e15b4405d789e35",
+    "firstName": "user_2",
+    "lastName": "user",
+    "username": "user_2",
+    "createDate": "2019-01-01",
+    "sessionTimeOut": 60
+  },
+  {
+    "id": "677173425e15b4405d789e36",
+    "firstName": "user_3",
+    "lastName": "user",
+    "username": "user_3",
     "createDate": "2019-01-01",
     "sessionTimeOut": 60
   }

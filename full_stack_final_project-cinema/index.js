@@ -11,6 +11,7 @@ connectDB();
 // const authController = require("./controllers/authController.js");
 const authRoutes = require("./routes/auth.js");
 const usersRoutes = require("./routes/users.js");
+const permissionsRoutes = require("./routes/permissions.js");
 
 app.use(
   cors({
@@ -23,6 +24,7 @@ app.use(
 app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/permissions', permissionsRoutes);
 // app.use('/api/members', memberRoutes);
 // app.use('/api/movies', moviesRoutes);
 // app.use('/api/subscriptions', subscriptionsRoutes);

@@ -12,7 +12,7 @@ export default function LogoutComp() {
     localStorage.clear();
     dispatch(stopCountdown()); // Stop the countdown
     dispatch(clearSession()); // Clear session data
-    dispatch(logout()); // Logout user
+    // dispatch(logout()); // Logout user
     return navigate("/login");
   }, []);
 

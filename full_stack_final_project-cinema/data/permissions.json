@@ -22,4 +22,32 @@
       "View Movies"
     ]
   }
+  ,
+  {
+    "id": "6771733a5e15b4405d789e35",
+    "permissions": [
+      "View Subscriptions",
+      "Create Subscriptions",
+      "Delete Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
+  }
+  ,
+  {
+    "id": "677173425e15b4405d789e36",
+    "permissions": [
+      "Create Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
+  },
+  {
+    "id": "123",
+    "permissions": [
+      "Create Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
+  }
 ]

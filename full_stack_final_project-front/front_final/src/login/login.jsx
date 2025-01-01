@@ -44,7 +44,7 @@ export default function Login() {
         // dispatch(setSessionTimeout(user)); // Set session timeout
         // dispatch(startCountdown()); 
         console.log("user", user);
-        // navigate("/main_page", { replace: true });
+        navigate("/main_page", { replace: true });
       } catch (error) {
         // setNameError(true);
         console.log("error", error);
