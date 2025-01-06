@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:3005/api/", // Replace with your API base URL
+const apiSubscriptions = axios.create({
+  baseURL: "http://localhost:3006/api/", // Replace with your API base URL
   timeout: 20000, // Set a timeout (optional)
   headers: {
     "Content-Type": "application/json", // Default content type
   },
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 // api.interceptors.request.use(
@@ -23,7 +23,7 @@ const api = axios.create({
 //   }
 // );
 
-api.interceptors.response.use(
+apiSubscriptions.interceptors.response.use(
   (response) => {
     return response; // Pass through successful responses
   },
@@ -34,4 +34,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default apiSubscriptions;

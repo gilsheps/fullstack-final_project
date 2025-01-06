@@ -27,13 +27,13 @@ export default function ManagementComp() {
       // console.log("data", data);
       setMergeUsersAndPermissions(data);
       const { data: permissions } = await getPermissions();
+      console.log("editClick", permissions[0]);
       setPermissions(permissions);
     };
     fetchData().catch(console.error);
     if (editClick) {
       setEditClick(false);
     }
-    // console.log("editClick", editClick);
 
     // window.addEventListener('scroll', handleScroll);
     // return () => window.removeEventListener('scroll', handleScroll);

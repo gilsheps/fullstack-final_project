@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-// import { useDispatch } from "react-redux";
+import apiCinema from "../utils/apiCinema.js";
 
 export default function RegisterComp() {
   const navigate = useNavigate();
@@ -21,11 +21,15 @@ export default function RegisterComp() {
 
   const handleSubmit = () => {
     console.log(user.email, user.password);
+    apiCinema.post("/auth/register", {
+      username: username,
+      password: password,
+    });
   };
 
   const handleCancelClicked = () => {
     navigate("/");
-  }
+  };
 
   return (
     <SignInContainer direction="column" justifyContent="space-between">
@@ -78,7 +82,14 @@ export default function RegisterComp() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormControl>
-          <Box sx={{ display: "flex", gap: 2, justifyContent: "center", alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Button type="submit" variant="contained">
               Create
             </Button>

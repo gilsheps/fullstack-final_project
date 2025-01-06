@@ -21,7 +21,10 @@ router.get("/populate", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const movies = moviesService.getAllMovies();
+  console.log("getAllMovies");
+  const filters = req.body;
+  const movies = await moviesService.getAllMovies(filters);
+  // console.log("movies", movies);
   res.json(movies);
 });
 

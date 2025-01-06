@@ -1,5 +1,4 @@
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Box,
@@ -11,8 +10,9 @@ import {
 } from "@mui/material";
 import { Card, SignInContainer } from "../shared-theme/CardAndContainer";
 import { loginSuccess } from "../redux/authSlice";
-import { setSessionTimeout, startCountdown } from '../redux/sessionSlice';
-import { useSelector,useDispatch } from "react-redux";
+import { setSessionTimeout, startCountdown } from "../redux/sessionSlice";
+import { useSelector, useDispatch } from "react-redux";
+import apiCinema from "../utils/apiCinema.js";
 
 const BASE_SERVER_URL = "http://localhost:3005/api";
 const BASE_AUTH = `${BASE_SERVER_URL}/auth/`;
@@ -25,15 +25,14 @@ export default function Login() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authSlice);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("nameError", nameError);
+
     if (nameError) {
       setNameError(true);
     } else {
       try {
-        const res = await axios.post(`${BASE_AUTH}login`, {
+        const res = await apiCinema.post("auth/login", {
           username: username || e.target.username.defaultValue,
           password: password || e.target.password.defaultValue,
         });
@@ -42,7 +41,7 @@ export default function Login() {
         console.log("success successsuccesssuccess");
         dispatch(loginSuccess({ user: data.user, token: data.token }));
         // dispatch(setSessionTimeout(user)); // Set session timeout
-        // dispatch(startCountdown()); 
+        // dispatch(startCountdown());
         console.log("user", user);
         navigate("/main_page", { replace: true });
       } catch (error) {
@@ -59,7 +58,7 @@ export default function Login() {
     setNameError(false);
   };
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value|| e.target.password.defaultValue);
+    setPassword(e.target.value || e.target.password.defaultValue);
     setNameError(false);
   };
 

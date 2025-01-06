@@ -35,11 +35,65 @@ router.get("/", (req, res) => {
   res.send(mergedData);
 });
 
+router.post("/", async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    username,
+    sessionTimeout,
+    permissions: reqPermissions,
+  } = req.body;
+  const userFromDB = await userServices.addUser(username, "pass");
+  let userId = userFromDB._id.toString();
+  const user = {
+    id: userId,
+    firstName: firstName,
+    lastName: lastName,
+    username: username,
+    sessionTimeout: sessionTimeout,
+  };
+  users.push(user);
+  jFile.writeFileSync(usersFilePath, users, { spaces: 2 });
+  let permissionObj = {
+    id: userId,
+    permissions: reqPermissions,
+  };
+  permissions.push(permissionObj);
+  jFile.writeFileSync(permissionsFilePath, permissions, { spaces: 2 });
+  res.send("User crated");
+});
+
 //Update User
 router.put("/:id", async (req, res) => {
-  // const { firstName, lastName, username, password, sessionTimeout, permissions } = req.body;
-  const updatedUser = userServices.updateUser(req.params.id, req.body);
-  res.json(updatedUser);
+  const userId = req.params.id;
+  const {
+    firstName,
+    lastName,
+    username,
+    sessionTimeout,
+    permissions: reqPermissions,
+  } = req.body;
+  const userUpdate = {
+    id: userId,
+    firstName: firstName,
+    lastName: lastName,
+    username: username,
+    sessionTimeout: sessionTimeout,
+  };
+  const updateUsers = users.map((user) =>
+    user.id === userId ? { ...user, ...userUpdate } : user
+  );
+  jFile.writeFileSync(usersFilePath, updateUsers, { spaces: 2 });
+  let permissionObj = {
+    id: userId,
+    permissions: reqPermissions,
+  };
+  const updatedPermissions = permissions.map((permission) =>
+    permission.id === userId ? { ...permission, ...permissionObj } : permission
+  );
+  console.log("updatedPermissions", updatedPermissions);
+  jFile.writeFileSync(permissionsFilePath, updatedPermissions, { spaces: 2 });
+  res.json("User updated");
 });
 
 // Delete User

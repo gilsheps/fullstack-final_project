@@ -15,6 +15,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import apiCinema from "../utils/apiCinema.js";
+
 
 export default function AddEditUserComp({
   user,
@@ -24,6 +26,9 @@ export default function AddEditUserComp({
   const [checked, setChecked] = useState([]);
   const [value, setValue] = useState(dayjs(user?.createDate));
   const [updateUser, setUpdateUser] = useState({ ...user });
+  const [formValues, setFormValues] = useState({});
+  const [currentPermission, setCurrentPermission] = useState("");
+  let viewPermission = permissions[0];
 
   useEffect(() => {
     const userPermissions = [];
@@ -31,48 +36,52 @@ export default function AddEditUserComp({
       userPermissions.push(permission);
     });
     setChecked(userPermissions);
+    console.log("user", user);
   }, [user]);
 
-  // useEffect(() => {
-  //   console.log("useEffect", checked);
+  useEffect(() => {
+    updateUser["permissions"] = checked;
+    console.log("useEffect", updateUser);
+  }, [checked]);
 
-  //     // ? setChecked([...checked,'View Subscriptions'])
-  //     // : ""
-  //   // checked.includes('Subscriptions') ? console.log('checked') : console.log('not checked')
-  //   // setChecked([...checked,'View Subscriptions']) : setChecked(['View Subscriptions'])
-  //   return () => true
-  // }, [checked]);
-
-  const handleToggle = (e, permission) => () => {
-    // if (checked.length === 0 && permission.includes("Subscriptions")) {
-    //   setChecked([...checked, "View Subscriptions", permission]);
-    //   // ? setChecked(["View Subscriptions"])
-    //   // : setChecked([permission]);
-    // } else {
-    //   setChecked((prev) =>
-    //     console.log("prev", prev) || prev.includes(permission)
-    //       ? prev.filter((item) => item !== permission)
-    //       : [...prev, permission]
-    //   );
-    // }
-    console.log(e);
-    setChecked((prev) =>
-      console.log("prev", prev) || prev.includes(permission)
-        ? prev.filter((item) => item !== permission)
-        : [...prev, permission]
-    );
-    console.log("checked", checked);
+  const handleToggle = (permission) => () => {
+    console.log("handleToggle", permission);
+    if (permission === viewPermission && checked.length > 0) {
+      return setChecked([...checked, viewPermission]);
+    } else if (
+      permission.includes("Subscriptions") &&
+      !checked.includes(viewPermission)
+    ) {
+      return setChecked([...checked, permission, viewPermission]);
+    }
+    setChecked((prev) => {
+      if (prev.includes(permission)) {
+        return prev.filter((item) => item !== permission);
+      } else {
+        return [...prev, permission];
+      }
+    });
   };
 
   const handleChange = (e) => {
+    e.preventDefault();
     updateUser[e.target.id.split("-")[1]] = e.target.value;
-    console.log("handleChange", updateUser);
   };
   const handlPickerChange = (newValue) => {
     setValue(newValue);
     updateUser["createDate"] = dayjs(newValue.$d).format("YYYY-MM-DD");
     console.log("handlPickerChange", updateUser);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("handleSubmit", updateUser);
+    const { data } = user
+      ? await apiCinema.put(`/users/${user.id}`, { updateUser })
+      : await apiCinema.post("/users/", { updateUser });
+    console.log(data)
+  };
+
   return (
     <>
       <Box sx={{ textAlign: "left" }}>
@@ -91,10 +100,13 @@ export default function AddEditUserComp({
           width: "40ch",
           gap: 2,
         }}
+        component="form"
+        onSubmit={handleSubmit}
       >
         <TextField
           id="standard-firstName"
           label="First Name:"
+          name="standard-firstName"
           defaultValue={user?.firstName || ""}
           onChange={(e) => handleChange(e)}
         />
@@ -131,24 +143,22 @@ export default function AddEditUserComp({
         </LocalizationProvider>
         <Box>
           <Typography gutterBottom>Permissions:</Typography>
-          <List sx={{ width: "100%", maxWidth: 360 }}>
+          <List sx={{ width: "100%", maxWidth: 360 }} id="list-heloo">
             {permissions?.map((permission, index) => {
               return (
                 <ListItemButton
                   key={index}
+                  id={`btn-list-heloo`}
                   role={undefined}
-                  id={`btn-${index}`}
-                  onClick={(e) => console.log(e.target)}
+                  onClick={handleToggle(permission)}
                   dense
                 >
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
-                      id={`btn-${index}`}
                       checked={checked.includes(permission)}
                       tabIndex={-1}
                       disableRipple
-                      
                     />
                   </ListItemIcon>
                   <ListItemText
@@ -162,8 +172,8 @@ export default function AddEditUserComp({
           </List>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <Button variant="contained" sx={{ mr: 1 }}>
-            Update
+          <Button variant="contained" sx={{ mr: 1 }} type="submit">
+            {user ? "Update" : "Save"}
           </Button>
           <Button variant="contained" onClick={returnActiveTab}>
             Cancel
