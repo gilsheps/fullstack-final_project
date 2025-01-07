@@ -12,7 +12,7 @@ import { Card, SignInContainer } from "../shared-theme/CardAndContainer";
 import { loginSuccess } from "../redux/authSlice";
 import { setSessionTimeout, startCountdown } from "../redux/sessionSlice";
 import { useSelector, useDispatch } from "react-redux";
-import apiCinema from "../utils/apiCinema.js";
+import api from "../utils/api.js";
 
 const BASE_SERVER_URL = "http://localhost:3005/api";
 const BASE_AUTH = `${BASE_SERVER_URL}/auth/`;
@@ -32,7 +32,7 @@ export default function Login() {
       setNameError(true);
     } else {
       try {
-        const res = await apiCinema.post("auth/login", {
+        const res = await api.post("auth/login", {
           username: username || e.target.username.defaultValue,
           password: password || e.target.password.defaultValue,
         });

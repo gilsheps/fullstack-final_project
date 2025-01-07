@@ -1,13 +1,12 @@
-import apiCinema from "./apiCinema.js";
+import api from "./api.js";
 
-const BASE_URL = "http://localhost:3005/api/";
 
 const getAllUsers = async () => {  
-    return await apiCinema.get('users');
+    return await api.get('users');
 }
 
 const getPermissions = async () => {
-    return await apiCinema.get('permissions');
+    return await api.get('permissions');
 }
 
 export { getAllUsers,getPermissions };

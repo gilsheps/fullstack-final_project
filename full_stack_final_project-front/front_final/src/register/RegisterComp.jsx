@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import apiCinema from "../utils/apiCinema.js";
+import api from "../utils/api.js";
 
 export default function RegisterComp() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function RegisterComp() {
 
   const handleSubmit = () => {
     console.log(user.email, user.password);
-    apiCinema.post("/auth/register", {
+    api.post("/auth/register", {
       username: username,
       password: password,
     });

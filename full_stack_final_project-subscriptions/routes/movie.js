@@ -28,4 +28,25 @@ router.get("/", async (req, res) => {
   res.json(movies);
 });
 
+router.get("/:page/:limit", async (req, res) => {
+  const movies = await moviesService.getMovieByPage(
+    req.params.page,
+    req.params.limit
+  );
+  console.log("movies", movies);
+  res.send(movies);
+});
+
+router.post("/", async (req, res) => {
+  console.log(req.body);
+  await moviesService.createNewMovie(req.body);
+  res.send("sdfnsdfs");
+});
+
+router.put("/:id", async (req, res) => {
+  console.log(req.body);
+  await moviesService.updateMovie(req.params.id, req.body);
+  res.send("sdfnsdfs");
+});
+
 module.exports = router;

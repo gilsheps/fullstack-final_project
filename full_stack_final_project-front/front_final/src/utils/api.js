@@ -7,9 +7,9 @@ const axiosConfig = {
     "Content-Type": "application/json", // Default content type
   },
 };
-const apiCinema = axios.create(axiosConfig);
+const api = axios.create(axiosConfig);
 // withCredentials: true,
-// apiCinema.interceptors.request.use((config) => {
+// api.interceptors.request.use((config) => {
 //   console.log(config, import.meta.env.VITE_BASE_SERVER_CINEMA_URL);
 // });
 //   (config) => {
@@ -25,7 +25,7 @@ const apiCinema = axios.create(axiosConfig);
 //   }
 // );
 
-// apiCinema.interceptors.response.use(
+// api.interceptors.response.use(
 //   (response) => {
 //     return response; // Pass through successful responses
 //   },
@@ -36,4 +36,4 @@ const apiCinema = axios.create(axiosConfig);
 //   }
 // );
 
-export default apiCinema;
+export default api;

@@ -15,7 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import apiCinema from "../utils/apiCinema.js";
+import api from "../utils/api.js";
 
 
 export default function AddEditUserComp({
@@ -77,8 +77,8 @@ export default function AddEditUserComp({
     e.preventDefault();
     console.log("handleSubmit", updateUser);
     const { data } = user
-      ? await apiCinema.put(`/users/${user.id}`, { updateUser })
-      : await apiCinema.post("/users/", { updateUser });
+      ? await api.put(`/users/${user.id}`, { updateUser })
+      : await api.post("/users/", { updateUser });
     console.log(data)
   };
 

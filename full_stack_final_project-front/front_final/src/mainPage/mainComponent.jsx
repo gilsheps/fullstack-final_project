@@ -48,10 +48,10 @@ export default function MainComponent() {
             <Tab label="Sign Out" value="4" />
           </TabList>
         </Box>
-        <TabPanel value="1">{<MoviesComp />}</TabPanel>
-        <TabPanel value="2">{<SubscriptionsComp />}</TabPanel>
-        <TabPanel value="3">{<ManagementComp />}</TabPanel>
-        <TabPanel value="4">{<LogoutComp />}</TabPanel>
+        <TabPanel value="1">{value === "1" && <MoviesComp />}</TabPanel>
+        <TabPanel value="2">{value === "2" && <SubscriptionsComp />}</TabPanel>
+        <TabPanel value="3">{value === "3" && <ManagementComp />}</TabPanel>
+        <TabPanel value="4">{value === "4" && <LogoutComp />}</TabPanel>
       </TabContext>
     </Box>
   );

@@ -1,11 +1,35 @@
-const Movie = require('../models/movieModel');
+const Movie = require("../models/movieModel");
 
 const getAllMovies = async (filters) => {
-    console.log('getAllMovies', filters)
-    return Movie.find(filters);
-}
+  console.log("getAllMovies", filters);
+  return Movie.find(filters);
+};
 const saveAllMovies = async (movies) => {
-    return await Movie.insertMany(movies);
-}
+  return await Movie.insertMany(movies);
+};
 
-module.exports = { getAllMovies, saveAllMovies };
+const getMovieByPage = async (page, limit) => {
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+    lean: true,
+  };
+  console.log("options", options);
+  return Movie.paginate({}, options);
+};
+
+const createNewMovie = (obj) => {
+  console.log("createNewMovie", obj);
+  return new Movie(obj).save();
+};
+
+const updateMovie = (id, obj) => {
+  return Movie.findByIdAndUpdate(id, obj);
+};
+module.exports = {
+  createNewMovie,
+  updateMovie,
+  getAllMovies,
+  saveAllMovies,
+  getMovieByPage,
+};
