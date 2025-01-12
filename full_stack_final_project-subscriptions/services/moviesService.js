@@ -13,9 +13,11 @@ const getMovieByPage = async (page, limit) => {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),
     lean: true,
+    leanWithId: false,
+    projection: "-__v",
+    customLabels: { docs: "data" },
   };
-  console.log("options", options);
-  return Movie.paginate({}, options);
+  return await Movie.paginate({}, options);
 };
 
 const createNewMovie = (obj) => {
@@ -26,10 +28,15 @@ const createNewMovie = (obj) => {
 const updateMovie = (id, obj) => {
   return Movie.findByIdAndUpdate(id, obj);
 };
+
+const deleteMovie = (id) => {
+  return Movie.findByIdAndDelete(id);
+};
 module.exports = {
   createNewMovie,
   updateMovie,
   getAllMovies,
   saveAllMovies,
   getMovieByPage,
+  deleteMovie,
 };

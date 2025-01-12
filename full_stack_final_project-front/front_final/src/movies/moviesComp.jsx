@@ -28,6 +28,7 @@ export default function MoviesComp() {
   const [page, setPage] = useState(1); // Current page
   const [totalPages, setTotalPages] = useState(1); // Total pages
   const [editClick, setEditClick] = useState(false);
+  const [findStr, setFindStr] = useState("");
   const limit = 10;
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function MoviesComp() {
     try {
       const response = await api.get(`movies/${page}/${limit}`);
       console.log("response.data", response);
-      setMovies(response.data.docs); // Set fetched data
+      setMovies(response.data.data); // Set fetched data
       setTotalPages(response.data.totalPages); // Set total pages
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,8 +79,14 @@ export default function MoviesComp() {
     setCurrentMovie(movie);
     setActiveTab(1);
   };
-  const handleDeleteMovie = (e, movie) => {
-    console.log("handleDeleteMovie", e.target);
+  const handleDeleteMovie = async (movie) => {
+    console.log("handleDeleteMovie", movie);
+    const { data } = await api.delete(`/movies/${movie._id}`);
+    console.log("data", data);
+    window.location.reload();
+  };
+  const handleButtonClick = () => {
+    console.log(findStr); // Logs the current value of the TextField
   };
 
   return (
@@ -102,82 +109,94 @@ export default function MoviesComp() {
           <TextField
             variant="outlined"
             size="small"
+            id="standard-find"
             placeholder="Enter movie name"
+            onChange={(e) => setFindStr(e.target.value)}
             sx={{ marginRight: 1 }}
           />
-          <Button variant="contained" sx={{ textTransform: "none" }}>
+          <Button
+            variant="contained"
+            sx={{ textTransform: "none" }}
+            onClick={(e) => {
+              setFindStr(e.target.value);
+              console.log(e.target);
+            }}
+          >
             Find
           </Button>
         </Box>
       </Box>
       {activeTab === 0 && (
         <Box sx={{ maxWidth: 500 }}>
-          {/* sx={{ maxWidth: 600, margin: "auto", padding: 2 }} */}
           {loading ? (
             <CircularProgress />
           ) : (
             <List>
-              {movies.map((movie, index) => (
-                <Box key={index} sx={{ padding: 2 }}>
-                  <Card variant="outlined" sx={{ border: 1 }}>
-                    <CardContent>
-                      <ListItem
-                        key={movie.id}
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="h6"
-                              sx={{ fontWeight: "bold" }}
-                            >
-                              {movie.name},{" "}
-                              {new Date(movie.premiered).getFullYear()}
-                            </Typography>
-                          }
-                        />
-                        <ListItemText
-                          primary={`genres: ${movie.genres.map(
-                            (genre) => `"${genre}"`
-                          )}`}
-                        />
-                        <Box sx={{ flexDirection: "column" }}>
-                          <CardMedia
-                            component="img"
-                            sx={{
-                              maxWidth: 100,
-                              pt: 1,
-                              objectFit: "contain",
-                            }}
-                            image={movie.image}
+              {movies
+                .filter((movie) =>
+                  findStr ? movie.name.includes(findStr) : movie
+                )
+                .map((movie, index) => (
+                  <Box key={index} sx={{ padding: 2 }}>
+                    <Card variant="outlined" sx={{ border: 1 }}>
+                      <CardContent>
+                        <ListItem
+                          key={movie.id}
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <ListItemText
+                            primary={
+                              <Typography
+                                variant="h6"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                {movie.name},{" "}
+                                {new Date(movie.premiered).getFullYear()}
+                              </Typography>
+                            }
                           />
-                        </Box>
-                        <Box sx={{ mt: 2 }}>
-                          <Button
-                            variant="contained"
-                            size="small"
-                            sx={{ mr: 1 }}
-                            onClick={() => handleEditMovie(movie)}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="contained"
-                            size="small"
-                            onClick={(e) => handleDeleteMovie(e, movie)}
-                          >
-                            Delete
-                          </Button>
-                        </Box>
-                      </ListItem>
-                    </CardContent>
-                  </Card>
-                </Box>
-              ))}
+                          <ListItemText
+                            primary={`genres: ${movie.genres.map(
+                              (genre) => `"${genre}"`
+                            )}`}
+                          />
+                          <Box sx={{ flexDirection: "column" }}>
+                            <CardMedia
+                              component="img"
+                              sx={{
+                                maxWidth: 100,
+                                pt: 1,
+                                objectFit: "contain",
+                              }}
+                              image={movie.image}
+                            />
+                          </Box>
+                          <Box sx={{ mt: 2 }}>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              sx={{ mr: 1 }}
+                              onClick={() => handleEditMovie(movie)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              onClick={(e) => handleDeleteMovie(movie)}
+                            >
+                              Delete
+                            </Button>
+                          </Box>
+                        </ListItem>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                ))}
             </List>
           )}
           <Box

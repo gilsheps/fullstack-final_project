@@ -14,25 +14,36 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import api from "../utils/api";
 
 export default function AddOrEditMovieComp({ movie, returnActiveTab }) {
   const [updateMovie, setUpdateMovie] = useState({ ...movie });
   const [value, setValue] = useState(dayjs(movie?.premiered));
-  useEffect(() => {
-    console.log("useEffect", movie);
-  }, []);
+
   const handleChange = (e) => {
     e.preventDefault();
-    console.log("handleChange", e.target.value);
-    updateMovie[e.target.id.split("-")[1]] = e.target.value;
+    if (e.target.id === "standard-genres") {
+      updateMovie[e.target.id.split("-")[1]] = [...e.target.value.split(",")];
+    } else {
+      updateMovie[e.target.id.split("-")[1]] = e.target.value;
+    }
+    console.log("handleChange", updateMovie);
   };
   const handleSubmit = async (e) => {
-    e.preventDefault;
-    console.log("handleSubmit", e.target);
-    const { data } = movie
-      ? await api.put(`/movies/${movie.id}`, { updateMovie })
-      : await api.post("/movies/", { updateMovie });
-    console.log(data);
+    delete updateMovie._id;
+    if (!updateMovie["premiered"]) {
+      console.log("sdflsndfkjlnsdfjksdn");
+      handlPickerChange(new Date());
+    }
+    console.log("handleSubmit", updateMovie);
+    try {
+      const { data } = movie
+        ? await api.put(`/movies/${movie._id}`, { updateMovie })
+        : await api.post("/movies/", { updateMovie });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
   const handlPickerChange = (newValue) => {
     setValue(newValue);
@@ -79,13 +90,6 @@ export default function AddOrEditMovieComp({ movie, returnActiveTab }) {
             defaultValue={movie?.image || ""}
             onChange={(e) => handleChange(e)}
           />
-          {/* <TextField
-            id="standard-premiered"
-            label="Premiered:"
-            name="standard-premiered"
-            defaultValue={dayjs(movie?.premiered).format("DD-MM-YYYY") || ""}
-            onChange={(e) => handleChange(e)}
-          /> */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Created date:"

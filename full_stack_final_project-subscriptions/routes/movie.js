@@ -33,20 +33,36 @@ router.get("/:page/:limit", async (req, res) => {
     req.params.page,
     req.params.limit
   );
-  console.log("movies", movies);
   res.send(movies);
 });
 
 router.post("/", async (req, res) => {
-  console.log(req.body);
-  await moviesService.createNewMovie(req.body);
-  res.send("sdfnsdfs");
+  try {
+    const { data } = await moviesService.createNewMovie(req.body);
+    console.log("post", data);
+    res.status(200).send("Movie created");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 });
 
 router.put("/:id", async (req, res) => {
-  console.log(req.body);
-  await moviesService.updateMovie(req.params.id, req.body);
-  res.send("sdfnsdfs");
+  try {
+    await moviesService.updateMovie(req.params.id, req.body);
+    res.status(200).send("Movie updated");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await moviesService.deleteMovie(id);
+    res.send(`Movie with id: ${id} was deleted`);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 });
 
 module.exports = router;

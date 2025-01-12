@@ -7,7 +7,6 @@ router.get("/", (req, res) => {
   const { id } = req.query;
   //   console.log("permissions", permissions, id);
   //   const filteredData = permissions.filter((item) => item.id === id);
-  console.log("filteredData", permissions);
   res.json(permissions);
 });
 module.exports = router;

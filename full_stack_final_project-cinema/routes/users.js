@@ -30,7 +30,6 @@ const mergeUsersAndPermissions = (users, permissions) => {
 // Get All Users
 router.get("/", (req, res) => {
   const mergedData = mergeUsersAndPermissions(users, permissions);
-  console.log("mergedData", mergedData);
   mergedData.shift();
   res.send(mergedData);
 });
