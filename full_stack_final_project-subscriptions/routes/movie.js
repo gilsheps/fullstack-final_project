@@ -13,7 +13,7 @@ router.get("/populate", async (req, res) => {
       image: show.image ? show.image.medium : "",
       premiered: show.premiered,
     }));
-    await Movie.insertMany(movies);
+    await moviesService.saveAllMovies(movies);
     res.status(200).send("Movies populated successfully");
   } catch (err) {
     res.status(500).send(err.message);
@@ -24,7 +24,6 @@ router.get("/", async (req, res) => {
   console.log("getAllMovies");
   const filters = req.body;
   const movies = await moviesService.getAllMovies(filters);
-  // console.log("movies", movies);
   res.json(movies);
 });
 

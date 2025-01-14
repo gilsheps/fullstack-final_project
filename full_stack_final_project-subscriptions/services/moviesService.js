@@ -21,7 +21,6 @@ const getMovieByPage = async (page, limit) => {
 };
 
 const createNewMovie = (obj) => {
-  console.log("createNewMovie", obj);
   return new Movie(obj).save();
 };
 

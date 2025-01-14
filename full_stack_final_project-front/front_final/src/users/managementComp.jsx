@@ -11,69 +11,49 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { getAllUsers, getPermissions } from "../utils/ManagementCompUtils";
 import AddEditUserComp from "./addEditUserComp";
+import TabManager from "../tabs/tabManager";
 
-export default function ManagementComp() {
+export default function ManagementComp({
+  activeTab,
+  setActiveTab,
+  editClick,
+  setEditClick,
+  returnActiveTab,
+}) {
   const [mergeUsersAndPermissions, setMergeUsersAndPermissions] = useState([]);
-  const [activeTab, setActiveTab] = useState(0);
-  const [editClick, setEditClick] = useState(false);
   const [permissions, setPermissions] = useState([]);
   const [user, setUser] = useState({});
-  // const [scrollPos, setScrollPos] = useState(0)
-  // const handleScroll = () => setScrollPos(window.scrollY);
 
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await getAllUsers();
-      // console.log("data", data);
       setMergeUsersAndPermissions(data);
       const { data: permissions } = await getPermissions();
-      console.log("editClick", permissions[0]);
       setPermissions(permissions);
     };
     fetchData().catch(console.error);
-    if (editClick) {
-      setEditClick(false);
-    }
-
-    // window.addEventListener('scroll', handleScroll);
-    // return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // useEffect(() => {
-  //   // Scroll to the saved position
-  //   window.scrollTo(0, scrollPos);
-  //   console.log("scrollPos", scrollPos);
-  // }, [scrollPos]);
-
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-    if (editClick) {
-      setEditClick(false);
-    }
-  };
-
-  const returnActiveTab = () => {
-    setActiveTab(0);
-    setEditClick(false);
-  };
-
-  const handleEditUser = (e, user, index) => {
+  const handleEditUser = (e, user) => {
     e.preventDefault();
     setEditClick(true);
     setUser(user);
     setActiveTab(1);
-    // window.removeEventListener('scroll', handleScroll)
   };
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "left" }}>
-        Users
-      </Typography>
-      <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
-        <Tab label="All Users" />
-        <Tab label={`${editClick ? "Edit" : "Add"} User`} />
-      </Tabs>
+      <TabManager
+        tabs={[
+          { label: "All Movies" },
+          { label: `${editClick ? "Edit" : "Add"} User` },
+        ]}
+        title={"Users"}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        editClick={editClick}
+        setEditClick={setEditClick}
+      />
       {activeTab === 0 && (
         <Box>
           {mergeUsersAndPermissions.map((user, index) => (

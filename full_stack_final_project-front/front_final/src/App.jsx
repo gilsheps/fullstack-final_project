@@ -2,14 +2,11 @@ import "./App.css";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useSessionTimer from "./app/useSessionTimer";
-import Login from "./login/login";
-import MainComp from "./mainPage/mainComponent";
-import LogOutComp from "./logout/logout";
-import RegisterComp from "./register/RegisterComp";
+import { Login, MainComp, LogOutComp, RegisterComp } from "./index";
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  useSessionTimer();
+  // useSessionTimer();
   return (
     <BrowserRouter>
       <Routes>

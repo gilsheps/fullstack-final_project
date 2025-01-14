@@ -26,8 +26,6 @@ export default function AddEditUserComp({
   const [checked, setChecked] = useState([]);
   const [value, setValue] = useState(dayjs(user?.createDate));
   const [updateUser, setUpdateUser] = useState({ ...user });
-  const [formValues, setFormValues] = useState({});
-  const [currentPermission, setCurrentPermission] = useState("");
   let viewPermission = permissions[0];
 
   useEffect(() => {
@@ -36,12 +34,10 @@ export default function AddEditUserComp({
       userPermissions.push(permission);
     });
     setChecked(userPermissions);
-    console.log("user", user);
   }, [user]);
 
   useEffect(() => {
     updateUser["permissions"] = checked;
-    console.log("useEffect", updateUser);
   }, [checked]);
 
   const handleToggle = (permission) => () => {
