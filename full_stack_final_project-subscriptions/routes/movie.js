@@ -1,5 +1,6 @@
 const express = require("express");
 const moviesService = require("../services/moviesService");
+const subscriptionsService = require("../services/subscriptionsService");
 const axios = require("axios");
 const router = express.Router();
 
@@ -25,6 +26,13 @@ router.get("/", async (req, res) => {
   const filters = req.body;
   const movies = await moviesService.getAllMovies(filters);
   res.json(movies);
+});
+
+router.get("/:id", async (req, res) => {
+  console.log("get movie name");
+  const name = await moviesService.getMovieName(req.params.id);
+  console.log("name", name);
+  res.json(name);
 });
 
 router.get("/:page/:limit", async (req, res) => {

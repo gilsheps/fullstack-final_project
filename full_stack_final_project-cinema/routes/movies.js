@@ -1,11 +1,11 @@
 const express = require("express");
-const axios = require("axios");
 const router = express.Router();
+const api = require("../utils/api");
 
 // Get All Movies
 router.get("/", async (req, res) => {
   try {
-    const { data } = await axios.get(`${process.env.SUBSCRIPTIONS_URL}movies`);
+    const { data } = await api.get("movies");
     res.json(data);
   } catch (err) {
     res.status(500).send(err.message);
@@ -13,20 +13,31 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:page/:limit", async (req, res) => {
-  const { data } = await axios.get(
-    `${process.env.SUBSCRIPTIONS_URL}movies/${req.params.page}/${req.params.limit}`
-  );
-  res.send(data);
+  try {
+    const { data } = await api.get(
+      `movies/${req.params.page}/${req.params.limit}`
+    );
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  console.log("get movie name ciema");
+  try {
+    const { data } = await api.get(`movies/${req.params.id}`);
+    console.log("movieName", data);
+    res.json(data);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 });
 
 router.post("/", async (req, res) => {
   const { updateMovie } = req.body;
   try {
-    const { data } = await axios.post(
-      `${process.env.SUBSCRIPTIONS_URL}movies`,
-      updateMovie
-    );
-    console.log('data',data)
+    const { data } = await api.post("movies", updateMovie);
     res.send(data);
   } catch (err) {
     res.status(500).send(err.message);
@@ -37,10 +48,7 @@ router.put("/:id", async (req, res) => {
   const { updateMovie } = req.body;
   console.log("update", updateMovie, req.params.id);
   try {
-    const { data } = await axios.put(
-      `${process.env.SUBSCRIPTIONS_URL}movies/${req.params.id}`,
-      updateMovie
-    );
+    const { data } = await api.put(`movies/${req.params.id}`, updateMovie);
     res.send(data);
   } catch (err) {
     res.status(500).send(err.message);
@@ -50,9 +58,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   console.log("delete", req.params.id);
   try {
-    const { data } = await axios.delete(
-      `${process.env.SUBSCRIPTIONS_URL}movies/${req.params.id}`
-    );
+    const { data } = await api.delete(`movies/${req.params.id}`);
     res.send(data);
   } catch (err) {
     res.status(500).send(err.message);

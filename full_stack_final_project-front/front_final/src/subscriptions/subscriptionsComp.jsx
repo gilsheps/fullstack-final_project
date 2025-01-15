@@ -1,29 +1,27 @@
 import {
   Box,
-  CircularProgress,
   List,
   ListItem,
   ListItemText,
-  Pagination,
   Typography,
-  TextField,
-  Tabs,
-  Tab,
   Button,
   Card,
   CardContent,
-  CardMedia,
-  Stack,
+  ListItemIcon,
+  Link,
 } from "@mui/material";
+import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import React from "react";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 import TabManager from "../tabs/tabManager";
 import AddOrEditMemberComp from "./addOrEditMemberComp";
+import dayjs from "dayjs";
 
 export default function SubscriptionsComp({
   activeTab,
   setActiveTab,
+  setValue,
   editClick,
   setEditClick,
   returnActiveTab,
@@ -53,6 +51,11 @@ export default function SubscriptionsComp({
     console.log("handleDeleteMember");
   };
 
+  const onMovieClick = () => {
+    localStorage.setItem("newValue", "1");
+    setValue("1")
+    
+  };
   return (
     <Box sx={{ p: 3 }}>
       <TabManager
@@ -65,7 +68,7 @@ export default function SubscriptionsComp({
         <Box sx={{ maxWidth: 500 }}>
           <List>
             {members.map((member, index) => (
-              <Box key={index} sx={{ padding: 2 }}>
+              <Box key={index} sx={{ pt: 2 }}>
                 <Card variant="outlined" sx={{ border: 1 }}>
                   <CardContent>
                     <ListItem
@@ -83,11 +86,12 @@ export default function SubscriptionsComp({
                           </Typography>
                         }
                       />
+
                       <Box sx={{ paddingTop: 2 }}>
                         <ListItemText primary={`Email: ${member.email}`} />
                         <ListItemText primary={`City: ${member.city}`} />
                       </Box>
-                      <Box sx={{ mt: 2 }}>
+                      <Box sx={{ mt: 2 }} name="box_btn">
                         <Button
                           variant="contained"
                           size="small"
@@ -105,6 +109,97 @@ export default function SubscriptionsComp({
                         </Button>
                       </Box>
                     </ListItem>
+                    <Box
+                      key={index}
+                      sx={{
+                        pt: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                      }}
+                      name="box_movies"
+                    >
+                      <Card variant="outlined" sx={{ border: 1 }}>
+                        <CardContent>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                            }}
+                            name="box_card"
+                          >
+                            <ListItemText
+                              primary={
+                                <Typography sx={{ fontWeight: "bold" }}>
+                                  {"Movies watched"}
+                                </Typography>
+                              }
+                            />
+                            <Button
+                              variant="contained"
+                              size="small"
+                              sx={{ mr: 1 }}
+                            >
+                              Subcscribe to new movie
+                            </Button>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-start",
+                              }}
+                              name="box_list"
+                            >
+                              {member.movies.map((movie, index) => {
+                                return (
+                                  <List key={index}>
+                                    <ListItem>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                        name="box_listitem"
+                                      >
+                                        <ListItemIcon>
+                                          <CircleRoundedIcon
+                                            sx={{
+                                              color: "black",
+                                              fontSize: 15,
+                                            }}
+                                          />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                          primary={
+                                            <Button
+                                            onClick={onMovieClick}
+                                              component={Link}
+                                              href="#"
+                                            >
+                                              {movie.name}
+                                            </Button>
+                                          }
+                                          secondary={dayjs(movie.date).format(
+                                            "DD/MM/YYYY"
+                                          )}
+                                          sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            justifyContent: "space-between",
+                                            width: 300,
+                                          }}
+                                        />
+                                      </Box>
+                                    </ListItem>
+                                  </List>
+                                );
+                              })}
+                            </Box>
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    </Box>
                   </CardContent>
                 </Card>
               </Box>

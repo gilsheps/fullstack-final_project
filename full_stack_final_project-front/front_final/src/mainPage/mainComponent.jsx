@@ -1,6 +1,12 @@
-import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import * as myModule from "../index";
+import { Box, Tab } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import {
+  MoviesComp,
+  SubscriptionsComp,
+  ManagementComp,
+  LogOutComp,
+} from "../index";
 
 export default function MainComponent() {
   const [value, setValue] = useState("1");
@@ -41,23 +47,23 @@ export default function MainComponent() {
     setEditClick(false);
   };
   return (
-    <myModule.Box sx={{ width: "100%", typography: "body1" }}>
-      <myModule.TabContext value={value}>
-        <myModule.Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <myModule.TabList
+    <Box sx={{ width: "100%", typography: "body1" }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <TabList
             onChange={handleChange}
             aria-label="lab API tabs example"
             centered
           >
-            <myModule.Tab label="Movies" value="1" />
-            <myModule.Tab label="Subscriptions" value="2" />
-            <myModule.Tab label="Users Management" value="3" />
-            <myModule.Tab label="Sign Out" value="4" />
-          </myModule.TabList>
-        </myModule.Box>
-        <myModule.TabPanel value="1">
+            <Tab label="Movies" value="1" />
+            <Tab label="Subscriptions" value="2" />
+            <Tab label="Users Management" value="3" />
+            <Tab label="Sign Out" value="4" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
           {value === "1" && (
-            <myModule.MoviesComp
+            <MoviesComp
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               editClick={editClick}
@@ -65,19 +71,20 @@ export default function MainComponent() {
               returnActiveTab={returnActiveTab}
             />
           )}
-        </myModule.TabPanel>
-        <myModule.TabPanel value="2">
+        </TabPanel>
+        <TabPanel value="2">
           {value === "2" && (
             <SubscriptionsComp
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              setValue={setValue}
               editClick={editClick}
               setEditClick={setEditClick}
               returnActiveTab={returnActiveTab}
             />
           )}
-        </myModule.TabPanel>
-        <myModule.TabPanel value="3">
+        </TabPanel>
+        <TabPanel value="3">
           {value === "3" && (
             <ManagementComp
               activeTab={activeTab}
@@ -87,11 +94,9 @@ export default function MainComponent() {
               returnActiveTab={returnActiveTab}
             />
           )}
-        </myModule.TabPanel>
-        <myModule.TabPanel value="4">
-          {value === "4" && <myModule.LogOutComp />}
-        </myModule.TabPanel>
-      </myModule.TabContext>
-    </myModule.Box>
+        </TabPanel>
+        <TabPanel value="4">{value === "4" && <LogOutComp />}</TabPanel>
+      </TabContext>
+    </Box>
   );
 }

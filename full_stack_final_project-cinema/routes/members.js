@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
   console.log("updateMember", updateMember);
   try {
     const { data } = await api.post(BASE_URL, updateMember);
-    console.log("data", data);
     res.send(data);
   } catch (err) {
     res.status(500).send(err.message);

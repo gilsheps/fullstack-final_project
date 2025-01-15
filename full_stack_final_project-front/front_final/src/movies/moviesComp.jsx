@@ -13,7 +13,7 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Stack,
+  Link,
 } from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -21,6 +21,7 @@ import api from "../utils/api";
 import AddOrEditMovieComp from "./addOrEditMovieComp";
 import { useSelector, useDispatch } from "react-redux";
 import TabManager from "../tabs/tabManager";
+import dayjs from "dayjs";
 
 export default function MoviesComp({
   activeTab,
@@ -30,6 +31,7 @@ export default function MoviesComp({
   returnActiveTab,
 }) {
   const [movies, setMovies] = useState([]);
+  const [res, setRes] = useState();
   const [currentMovie, setCurrentMovie] = useState({});
   const [loading, setLoading] = useState(false); // Loading state
   const [page, setPage] = useState(1); // Current page
@@ -40,12 +42,14 @@ export default function MoviesComp({
 
   useEffect(() => {
     fetchData(page);
+    console.log("res", res);
   }, [page]);
 
   const fetchData = async (page) => {
     setLoading(true);
     try {
       const response = await api.get(`movies/${page}/${limit}`);
+      console.log("response", response.data);
       setMovies(response.data.data); // Set fetched data
       setTotalPages(response.data.totalPages); // Set total pages
     } catch (error) {
@@ -69,13 +73,15 @@ export default function MoviesComp({
   const handleDeleteMovie = async (movie) => {
     console.log("handleDeleteMovie", movie);
     const { data } = await api.delete(`/movies/${movie._id}`);
-    console.log("data", data);
     window.location.reload();
   };
   const handleButtonClick = () => {
     setFindStr(updateMovies);
   };
 
+  const foo = (bla) => {
+    console.log("blalala", bla);
+  };
   return (
     <Box sx={{ p: 3 }}>
       <TabManager
@@ -120,21 +126,23 @@ export default function MoviesComp({
       </TabManager>
       <Box>
         {activeTab === 0 && (
-          <Box sx={{ maxWidth: 500 }}>
+          <Box component="div" sx={{ maxWidth: 600 }}>
             {loading ? (
               <CircularProgress />
             ) : (
               <List>
                 {movies
-                  .filter((movie) =>
-                    findStr ? movie.name.toLowerCase().includes(findStr) : movie
+                  .filter((item) =>
+                    findStr
+                      ? item.movie.name.toLowerCase().includes(findStr)
+                      : item.movie
                   )
-                  .map((movie, index) => (
+                  .map((item, index) => (
                     <Box key={index} sx={{ padding: 2 }}>
                       <Card variant="outlined" sx={{ border: 1 }}>
                         <CardContent>
                           <ListItem
-                            key={movie.id}
+                            key={item.movie.id}
                             sx={{
                               display: "flex",
                               flexDirection: "column",
@@ -147,40 +155,87 @@ export default function MoviesComp({
                                   variant="h6"
                                   sx={{ fontWeight: "bold" }}
                                 >
-                                  {movie.name},{" "}
-                                  {new Date(movie.premiered).getFullYear()}
+                                  {item.movie.name},{" "}
+                                  {new Date(item.movie.premiered).getFullYear()}
                                 </Typography>
                               }
                             />
                             <ListItemText
-                              primary={`genres: ${movie.genres.map(
+                              primary={`Genres: ${item.movie.genres.map(
                                 (genre) => `"${genre}"`
                               )}`}
                             />
-                            <Box sx={{ flexDirection: "column" }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: 5,
+                              }}
+                            >
                               <CardMedia
                                 component="img"
                                 sx={{
-                                  maxWidth: 100,
-                                  pt: 1,
+                                  maxWidth: 120,
                                   objectFit: "contain",
                                 }}
-                                image={movie.image}
+                                image={item.movie.image}
                               />
+                              <Card
+                                variant="outlined"
+                                sx={{ border: 1, objectFit: "contain" }}
+                                name="carddddd"
+                              >
+                                <CardContent name="CardContentCardContent">
+                                  <ListItemText
+                                    primary={
+                                      <Typography
+                                        variant="subtitle1"
+                                        sx={{ fontWeight: "bold" }}
+                                      >
+                                        {"Subsciptions watched"}
+                                      </Typography>
+                                    }
+                                  />
+
+                                  {item.members.map((member, index) => {
+                                    return (
+                                      <List
+                                        key={index}
+                                        sx={{
+                                          display: "flex",
+                                          flexDirection: "column",
+                                        }}
+                                      >
+                                        <ListItem>
+                                          <ListItemText
+                                            primary={
+                                              <Link to="a">{member.name}</Link>
+                                            }
+                                            secondary={dayjs(
+                                              member.date
+                                            ).format("DD/MM/YYYY")}
+                                            sx={{ display: "flex", gap: 2 }}
+                                          />
+                                        </ListItem>
+                                      </List>
+                                    );
+                                  })}
+                                </CardContent>
+                              </Card>
                             </Box>
                             <Box sx={{ mt: 2 }}>
                               <Button
                                 variant="contained"
                                 size="small"
                                 sx={{ mr: 1 }}
-                                onClick={() => handleEditMovie(movie)}
+                                onClick={() => handleEditMovie(item.movie)}
                               >
                                 Edit
                               </Button>
                               <Button
                                 variant="contained"
                                 size="small"
-                                onClick={(e) => handleDeleteMovie(movie)}
+                                onClick={(e) => handleDeleteMovie(item.movie)}
                               >
                                 Delete
                               </Button>
