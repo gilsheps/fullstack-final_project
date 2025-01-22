@@ -3,28 +3,29 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userServices = require("../services/userService");
-const { createSecretToken } = require("../tokenGeneration/generateToken.js");
+const {createSecretToken} = require("../tokenGeneration/generateToken.js");
 const router = express.Router();
 const SECRET_KEY = "some_key";
 const TOKEN_EXPIRATION = "5m";
+const permissions = require("../data/permissions.json");
 
 // Login user
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const {username, password} = req.body;
   console.log("username", username, "password", password);
   if (!(username && password)) {
-    return res.status(400).json({ message: "All input is required" });
+    return res.status(400).json({message: "All input is required"});
   }
   const user = await userServices.getUserByUsername(username);
-  console.log("user", user);
+
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return res.status(404).json({message: "User not found"});
   }
 
   bcrypt.compare(password, user.password, (err, isMatch) => {
     if (err) {
       console.error(err);
-      return res.status(404).json({ message: "Invalid credentials" });
+      return res.status(404).json({message: "Invalid credentials"});
     }
     if (isMatch) {
       console.log("Password matches!");
@@ -41,18 +42,18 @@ router.post("/login", async (req, res) => {
   //   httpOnly: true, // Cookie cannot be accessed via client-side scripts
   //   sameSite: "None",
   // });
-  console.log("token", token);
   res.json({
     success: true,
     message: "Login successful",
-    user: { id: user._id, username: user.username },
+    user: {id: user._id, username: user.username},
     token,
+    permissions: permissions.find((permission) => permission.id === user._id.toString()).permissions,
   });
 });
 
 // Register user
 router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
+  const {username, password} = req.body;
   const user = await userServices.getUserByUsername(username);
   console.log("user", user);
   if (user) {
@@ -61,7 +62,7 @@ router.post("/register", async (req, res) => {
     await userServices.firstLogin(username, password);
     res.status(201).send(`User ${username} updated successfully`);
   } else {
-    return res.status(400).json({ message: `User ${username} not exists` });
+    return res.status(400).json({message: `User ${username} not exists`});
   }
 });
 

@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
   const subscriptions = req.body;
   try {
     const { data } = await api.post("subscriptions", subscriptions);
-    console.log("movieName", data);
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send(err.message);

@@ -1,20 +1,23 @@
-import { useState, useEffect } from "react";
-import { Box, Tab } from "@mui/material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import {
-  MoviesComp,
-  SubscriptionsComp,
-  ManagementComp,
-  LogOutComp,
-} from "../index";
+import {useState, useEffect} from "react";
+import {Box, Tab} from "@mui/material";
+import {TabContext, TabList, TabPanel} from "@mui/lab";
+import {MoviesComp, SubscriptionsComp, ManagementComp, LogOutComp} from "../index";
+import {useSelector} from "react-redux";
+import NoPermissionComp from "./noPermissionComp";
+import {useNavigate} from "react-router";
 
 export default function MainComponent() {
   const [value, setValue] = useState("1");
   const [activeTab, setActiveTab] = useState(0);
   const [editClick, setEditClick] = useState(false);
+  const auth = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("main useEffect");
+    console.log('authauthauth',auth)
+    if (!auth.user){
+      navigate("/login")
+    }else{
     let valueFromStorage = localStorage.getItem("newValue");
     if (valueFromStorage == "0") {
       setValue("1");
@@ -31,13 +34,12 @@ export default function MainComponent() {
         }
       }
     }
+  }
   }, []);
 
   const handleChange = (event, newValue) => {
-    console.log("handleChange", newValue);
     setValue(newValue);
     localStorage.setItem("newValue", newValue);
-    console.log("getItem", localStorage.getItem("newValue"));
     setActiveTab(0);
     setEditClick(false);
   };
@@ -47,14 +49,10 @@ export default function MainComponent() {
     setEditClick(false);
   };
   return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
+    <Box sx={{width: "100%", typography: "body1"}}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList
-            onChange={handleChange}
-            aria-label="lab API tabs example"
-            centered
-          >
+        <Box sx={{borderBottom: 1, borderColor: "divider"}}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
             <Tab label="Movies" value="1" />
             <Tab label="Subscriptions" value="2" />
             <Tab label="Users Management" value="3" />
@@ -85,15 +83,19 @@ export default function MainComponent() {
           )}
         </TabPanel>
         <TabPanel value="3">
-          {value === "3" && (
-            <ManagementComp
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              editClick={editClick}
-              setEditClick={setEditClick}
-              returnActiveTab={returnActiveTab}
-            />
-          )}
+          {/*  */}
+          {value === "3" &&
+            (auth.permissions?.includes("Admin") ? (
+              <ManagementComp
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                editClick={editClick}
+                setEditClick={setEditClick}
+                returnActiveTab={returnActiveTab}
+              />
+            ) : (
+              <NoPermissionComp />
+            ))}
         </TabPanel>
         <TabPanel value="4">{value === "4" && <LogOutComp />}</TabPanel>
       </TabContext>

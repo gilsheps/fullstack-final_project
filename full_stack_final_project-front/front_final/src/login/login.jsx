@@ -1,17 +1,10 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import {
-  Box,
-  Button,
-  FormControl,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Card, SignInContainer } from "../shared-theme/CardAndContainer";
-import { loginSuccess } from "../redux/authSlice";
-import { setSessionTimeout, startCountdown } from "../redux/sessionSlice";
-import { useSelector, useDispatch } from "react-redux";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
+import {Box, Button, FormControl, Link, TextField, Typography} from "@mui/material";
+import {Card, SignInContainer} from "../shared-theme/CardAndContainer";
+import {loginSuccess} from "../redux/authSlice";
+import {setSessionTimeout, startCountdown} from "../redux/sessionSlice";
+import {useSelector, useDispatch} from "react-redux";
 import api from "../utils/api.js";
 
 const BASE_SERVER_URL = "http://localhost:3005/api";
@@ -32,18 +25,18 @@ export default function Login() {
       setNameError(true);
     } else {
       try {
-        const res = await api.post("auth/login", {
-          username: username || e.target.username.defaultValue,
-          password: password || e.target.password.defaultValue,
+        const {data} = await api.post("auth/login", {
+          username: username || e.target.username.value,
+          password: password || e.target.password.value,
         });
 
-        const data = res.data;
-        console.log("success successsuccesssuccess");
-        dispatch(loginSuccess({ user: data.user, token: data.token }));
+        // const data = res.data;
+        console.log("success successsuccesssuccess", data);
+        dispatch(loginSuccess({user: data.user, token: data.token, permissions: data.permissions}));
         // dispatch(setSessionTimeout(user)); // Set session timeout
         // dispatch(startCountdown());
         console.log("user", user);
-        navigate("/main_page", { replace: true });
+        navigate("/main_page", {replace: true});
       } catch (error) {
         // setNameError(true);
         console.log("error", error);
@@ -65,14 +58,10 @@ export default function Login() {
   return (
     <SignInContainer direction="column" justifyContent="space-between">
       <div>
-        <h3 style={{ color: "black" }}>Movies - Subscription Web Site</h3>
+        <h3 style={{color: "black"}}>Movies - Subscription Web Site</h3>
       </div>
       <Card variant="outlined">
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-        >
+        <Typography component="h1" variant="h4" sx={{width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)"}}>
           Log in Page
         </Typography>
         <Box
@@ -97,7 +86,7 @@ export default function Login() {
               required
               fullWidth
               variant="outlined"
-              sx={{ ariaLabel: "username" }}
+              sx={{ariaLabel: "username"}}
               defaultValue="admin"
               onChange={handleNameChange}
               helperText={nameError ? "Check your username" : ""}
@@ -122,14 +111,10 @@ export default function Login() {
           <Button type="submit" fullWidth variant="contained">
             Login
           </Button>
-          <Typography sx={{ textAlign: "center" }}>
+          <Typography sx={{textAlign: "center"}}>
             New User?{" "}
             <span>
-              <Link
-                href="/register"
-                variant="body2"
-                sx={{ alignSelf: "center" }}
-              >
+              <Link href="/register" variant="body2" sx={{alignSelf: "center"}}>
                 Create Account
               </Link>
             </span>

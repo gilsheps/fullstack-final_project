@@ -6,20 +6,14 @@ const jFile = require("jsonfile");
 const path = require("path");
 
 const usersFilePath = path.join(__dirname, "../data/", "users.json");
-const permissionsFilePath = path.join(
-  __dirname,
-  "../data/",
-  "permissions.json"
-);
+const permissionsFilePath = path.join(__dirname, "../data/", "permissions.json");
 const users = require(usersFilePath);
 const permissions = require(permissionsFilePath);
 
 // Merge users and permissions
 const mergeUsersAndPermissions = (users, permissions) => {
   return users.map((user) => {
-    const userPermissions = permissions.find(
-      (permission) => permission.id === user.id
-    );
+    const userPermissions = permissions.find((permission) => permission.id === user.id);
     return {
       ...user,
       permissions: userPermissions ? userPermissions.permissions : [],
@@ -35,13 +29,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    username,
-    sessionTimeout,
-    permissions: reqPermissions,
-  } = req.body;
+  const { firstName, lastName, username, sessionTimeout, permissions: reqPermissions } = req.body;
   const userFromDB = await userServices.addUser(username, "pass");
   let userId = userFromDB._id.toString();
   const user = {
@@ -65,13 +53,7 @@ router.post("/", async (req, res) => {
 //Update User
 router.put("/:id", async (req, res) => {
   const userId = req.params.id;
-  const {
-    firstName,
-    lastName,
-    username,
-    sessionTimeout,
-    permissions: reqPermissions,
-  } = req.body;
+  const { firstName, lastName, username, sessionTimeout, permissions: reqPermissions } = req.body;
   const userUpdate = {
     id: userId,
     firstName: firstName,
@@ -79,9 +61,7 @@ router.put("/:id", async (req, res) => {
     username: username,
     sessionTimeout: sessionTimeout,
   };
-  const updateUsers = users.map((user) =>
-    user.id === userId ? { ...user, ...userUpdate } : user
-  );
+  const updateUsers = users.map((user) => (user.id === userId ? { ...user, ...userUpdate } : user));
   jFile.writeFileSync(usersFilePath, updateUsers, { spaces: 2 });
   let permissionObj = {
     id: userId,
@@ -100,9 +80,7 @@ router.delete("/:id", async (req, res) => {
   const userId = req.params.id;
   await userServices.deleteUser(userId);
   const updatedUsers = users.filter((user) => user.id !== userId);
-  const updatedPermissions = permissions.filter(
-    (permission) => permission.id !== userId
-  );
+  const updatedPermissions = permissions.filter((permission) => permission.id !== userId);
   jFile.writeFileSync(usersFilePath, updatedUsers, { spaces: 2 });
   jFile.writeFileSync(permissionsFilePath, updatedPermissions, { spaces: 2 });
   res.send("User deleted");

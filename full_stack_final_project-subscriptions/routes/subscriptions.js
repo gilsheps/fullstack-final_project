@@ -16,8 +16,8 @@ router.get("/:id", async (req, res) => {
 
 // Add Subscription
 router.post("/", async (req, res) => {
-  await subscriptionsService.createSubscription(req.body);
-  const subscriptions = await subscriptionsService.getAllSubscription();
+  const subscriptions = await subscriptionsService.createSubscription(req.body);
+  // const subscriptions = await subscriptionsService.getAllSubscription();
   res.json(subscriptions);
 });
 

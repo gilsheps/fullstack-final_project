@@ -1,10 +1,17 @@
 const Subscription = require("../models/subscriptionsModel");
-const memeberService = require("./membersService");
+const Member = require("../models/membersModel");
 const { ObjectId } = require("mongodb");
 
-const createSubscription = async (subscriptions) => {
-  // const subscription = new Subscription({memberId, movies });
-  return await Subscription.insertMany(subscriptions);
+const createSubscription = async (subscription) => {
+  console.log("subscription", subscription);
+  const updateSubscription = await Subscription.updateOne(
+    {
+      memberId: subscription.memberId,
+    },
+    { $addToSet: { movies: { $each: subscription.movies } } },
+    { upsert: true }
+  );
+  return updateSubscription;
 };
 
 const getAllSubscription = async (filters) => {
@@ -47,6 +54,7 @@ const getMemberIdsByMovieId = async (movieId) => {
     throw error;
   }
 };
+
 module.exports = {
   createSubscription,
   getAllSubscription,

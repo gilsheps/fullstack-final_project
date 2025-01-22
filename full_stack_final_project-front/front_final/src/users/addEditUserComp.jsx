@@ -10,13 +10,10 @@ import {
   Checkbox,
   Button,
 } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import api from "../utils/api.js";
-
+import DatePickerComp from "../components/datePickerComp.jsx";
 
 export default function AddEditUserComp({
   user,
@@ -75,7 +72,7 @@ export default function AddEditUserComp({
     const { data } = user
       ? await api.put(`/users/${user.id}`, { updateUser })
       : await api.post("/users/", { updateUser });
-    console.log(data)
+    console.log(data);
   };
 
   return (
@@ -125,18 +122,7 @@ export default function AddEditUserComp({
           type="number"
           onChange={(e) => handleChange(e)}
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Created date:"
-            defaultValue={value}
-            onChange={(e, newValue) => handlPickerChange(e, newValue)}
-            slotProps={{
-              textField: {
-                id: "standard-createDate",
-              },
-            }}
-          />
-        </LocalizationProvider>
+        <DatePickerComp dateObj={user?.createDate} updateUser={updateUser}/>
         <Box>
           <Typography gutterBottom>Permissions:</Typography>
           <List sx={{ width: "100%", maxWidth: 360 }} id="list-heloo">

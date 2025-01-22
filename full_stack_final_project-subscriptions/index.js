@@ -7,7 +7,7 @@ const initDBOnLoad = require("./configs/initDB.js");
 const membersRoutes = require('./routes/members.js');
 const moviesRoutes = require('./routes/movie.js');
 const subscriptionsRoutes = require('./routes/subscriptions.js');
-
+const removeDuplicateMoviesInSubscriptions = require("./temp.js")
 const app = express();
 const PORT = process.env.PORT;
 connectDB();
@@ -28,5 +28,6 @@ app.use('/api/subscriptions', subscriptionsRoutes);
 
 app.listen(PORT, () => {
   console.log(`app is listening at http://localhost:${PORT}`);
+  // removeDuplicateMoviesInSubscriptions()
   // initDBOnLoad()
 });
