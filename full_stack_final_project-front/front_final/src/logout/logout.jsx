@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { stopCountdown, clearSession } from '../redux/sessionSlice';
@@ -10,9 +9,8 @@ export default function LogoutComp() {
   const dispatch = useDispatch();
   useEffect(() => {
     localStorage.clear();
-    // dispatch(stopCountdown()); // Stop the countdown
-    // dispatch(clearSession()); // Clear session data
-    // dispatch(logout()); // Logout user
+    dispatch(stopCountdown());
+    dispatch(clearSession());
     return navigate("/login");
   }, []);
 

@@ -24,6 +24,7 @@ const deleteUser = async (id) => {
 };
 
 const firstLogin = async (username, password) => {
+  console.log('firstLogin', username, password)
   const filter = { username: username };
   const update = { password: password };
   return await User.findOneAndUpdate(filter, update, {

@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { data } = await membersService.createNewMember(req.body);
+    const {data} = await membersService.createNewMember(req.body);
     console.log("post", data);
     res.status(200).send("Member created");
   } catch (err) {
@@ -41,9 +41,7 @@ router.delete("/:id", async (req, res) => {
 // Populate Members
 router.get("/populate", async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/users"
-    );
+    const response = await axios.get(process.env.USERS_URL);
     const members = response.data.map((user) => ({
       name: user.name,
       email: user.email,

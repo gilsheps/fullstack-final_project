@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  Box,
-  TextField,
-  Typography,
-  List,
-  ListItemText,
-  ListItemButton,
-  ListItemIcon,
-  Checkbox,
-  Button,
+  Box, TextField,
+  Typography, Button
 } from "@mui/material";
 import api from "../utils/api";
 
 export default function AddOrEditMemberComp({ member, returnActiveTab }) {
   const [updateMember, setUpdatemember] = useState({ ...member });
 
-  useEffect(() => {
-    console.log('member',member)
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +25,6 @@ export default function AddOrEditMemberComp({ member, returnActiveTab }) {
   const handleChange = (e) => {
     e.preventDefault();
     updateMember[e.target.id.split("-")[1]] = e.target.value;
-    console.log("handleChange", updateMember);
   };
   return (
     <Box sx={{ textAlign: "left" }}>

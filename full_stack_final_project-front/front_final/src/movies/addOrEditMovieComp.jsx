@@ -1,19 +1,9 @@
 import React from "react";
-import {
-  Box,
-  TextField,
-  Typography,
-  List,
-  ListItemText,
-  ListItemButton,
-  ListItemIcon,
-  Checkbox,
-  Button,
-} from "@mui/material";
-import { useState, useEffect } from "react";
-import dayjs from "dayjs";
+import { Box,TextField,Typography,Button } from "@mui/material";
+import { useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import api from "../utils/api";
 
 export default function AddOrEditMovieComp({ movie, returnActiveTab }) {

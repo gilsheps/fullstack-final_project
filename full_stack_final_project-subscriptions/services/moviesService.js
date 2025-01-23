@@ -34,7 +34,7 @@ const getMovieByPage = async (page, limit) => {
     lean: true,
     leanWithId: false,
     projection: "-__v",
-    customLabels: { docs: "data" },
+    customLabels: {docs: "data"},
   };
   const result = await Movie.paginate({}, options);
   const movieIds = result.data.map((movie) => movie._id);
@@ -42,7 +42,7 @@ const getMovieByPage = async (page, limit) => {
   const subscriptions = await Subscription.aggregate([
     {
       $match: {
-        "movies.movieId": { $in: movieIds },
+        "movies.movieId": {$in: movieIds},
       },
     },
     {
@@ -66,7 +66,7 @@ const getMovieByPage = async (page, limit) => {
             date: sub.date,
           }))
       );
-      return { movie, members };
+      return {movie, members};
     })
   );
   result["data"] = finalResults;

@@ -1,12 +1,12 @@
 import React from "react"
-import {Box, Typography, Button, Select, MenuItem} from "@mui/material"
+import { Box, Typography, Button, Select, MenuItem } from "@mui/material"
 import DatePickerComp from "../components/datePickerComp"
 
-export default function SubcscribeNewMovieComp({member, movies, setSelectValue, selectValue, handleSubscribeClick, datePicker, setDatePicker}) {
+export default function SubcscribeNewMovieComp({ member, movies, setSelectValue, selectValue, handleSubscribeClick, datePicker, setDatePicker }) {
   return (
     <>
-      <Box sx={{mt: 2, pb: 3}}>
-        <Typography sx={{fontWeight: "bold"}}>Add a new movie</Typography>
+      <Box sx={{ mt: 2, pb: 3 }}>
+        <Typography sx={{ fontWeight: "bold" }}>Add a new movie</Typography>
       </Box>
       <Box>
         <Select
@@ -29,7 +29,7 @@ export default function SubcscribeNewMovieComp({member, movies, setSelectValue, 
         <DatePickerComp dateObj={new Date()} setDatePicker={setDatePicker} />
       </Box>
       <Box>
-        <Button variant="contained" size="small" sx={{mr: 1}} onClick={() => handleSubscribeClick(member, selectValue, datePicker)}>
+        <Button variant="contained" size="small" sx={{ mr: 1 }} onClick={() => handleSubscribeClick(member, selectValue, datePicker)}>
           Subcribe
         </Button>
       </Box>

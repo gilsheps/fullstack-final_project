@@ -1,13 +1,13 @@
-import React, {useState} from "react"
-import {Box, TextField, Button, Typography} from "@mui/material"
+import React, { useState } from "react"
+import { Box, TextField, Button, Typography } from "@mui/material"
 
-export default function FindComp({setFindStr}) {
+export default function FindComp({ setFindStr }) {
   const [updateMovies, setUpdateMovies] = useState("")
   const handleClick = e => {
-    if(e.target.value && e.key == "Enter"){
+    if (e.target.value && e.key == "Enter") {
       console.log('e.target.value && e.key == "Enter"')
       setFindStr(updateMovies)
-    }else{
+    } else {
       console.log('removeItem')
       localStorage.removeItem('movieName')
       return ""
@@ -15,8 +15,8 @@ export default function FindComp({setFindStr}) {
   }
   return (
     <>
-      <Box sx={{display: "flex", alignItems: "flex-start"}}>
-        <Typography variant="body1" sx={{fontWeight: "bold", marginRight: 1}}>
+      <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginRight: 1 }}>
           Find Movie:
         </Typography>
         <TextField
@@ -26,9 +26,9 @@ export default function FindComp({setFindStr}) {
           placeholder="Enter movie name"
           onKeyDown={handleClick}
           onChange={e => (e.target.value ? setUpdateMovies(e.target.value.toLowerCase()) : setUpdateMovies(""))}
-          sx={{marginRight: 1}}
+          sx={{ marginRight: 1 }}
         />
-        <Button variant="contained" sx={{textTransform: "none"}} onClick={() => setFindStr(updateMovies)}>
+        <Button variant="contained" sx={{ textTransform: "none" }} onClick={() => setFindStr(updateMovies)}>
           Find
         </Button>
       </Box>

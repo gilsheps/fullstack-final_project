@@ -1,13 +1,12 @@
 const express = require("express");
 const moviesService = require("../services/moviesService");
-const subscriptionsService = require("../services/subscriptionsService");
 const axios = require("axios");
 const router = express.Router();
 
 // Populate Movies
 router.get("/populate", async (req, res) => {
   try {
-    const response = await axios.get("https://api.tvmaze.com/shows");
+    const response = await axios.get(process.env.SHOW_URL);
     const movies = response.data.map((show) => ({
       name: show.name,
       genres: show.genres,
@@ -36,16 +35,13 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/:page/:limit", async (req, res) => {
-  const movies = await moviesService.getMovieByPage(
-    req.params.page,
-    req.params.limit
-  );
+  const movies = await moviesService.getMovieByPage(req.params.page, req.params.limit);
   res.send(movies);
 });
 
 router.post("/", async (req, res) => {
   try {
-    const { data } = await moviesService.createNewMovie(req.body);
+    const {data} = await moviesService.createNewMovie(req.body);
     console.log("post", data);
     res.status(200).send("Movie created");
   } catch (err) {

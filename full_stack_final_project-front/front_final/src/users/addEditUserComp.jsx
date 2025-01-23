@@ -1,25 +1,16 @@
 import React from "react";
 import {
-  Box,
-  TextField,
-  Typography,
-  List,
-  ListItemText,
-  ListItemButton,
-  ListItemIcon,
-  Checkbox,
-  Button,
+  Box, TextField,
+  Typography, List,
+  ListItemText, ListItemButton,
+  ListItemIcon, Checkbox, Button
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import api from "../utils/api.js";
 import DatePickerComp from "../components/datePickerComp.jsx";
 
-export default function AddEditUserComp({
-  user,
-  permissions,
-  returnActiveTab,
-}) {
+export default function AddEditUserComp({ user, permissions, returnActiveTab }) {
   const [checked, setChecked] = useState([]);
   const [value, setValue] = useState(dayjs(user?.createDate));
   const [updateUser, setUpdateUser] = useState({ ...user });
@@ -68,11 +59,9 @@ export default function AddEditUserComp({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit", updateUser);
-    const { data } = user
+    user
       ? await api.put(`/users/${user.id}`, { updateUser })
       : await api.post("/users/", { updateUser });
-    console.log(data);
   };
 
   return (
@@ -122,7 +111,7 @@ export default function AddEditUserComp({
           type="number"
           onChange={(e) => handleChange(e)}
         />
-        <DatePickerComp dateObj={user?.createDate} updateUser={updateUser}/>
+        <DatePickerComp dateObj={user?.createDate} updateUser={updateUser} />
         <Box>
           <Typography gutterBottom>Permissions:</Typography>
           <List sx={{ width: "100%", maxWidth: 360 }} id="list-heloo">

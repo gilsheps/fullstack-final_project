@@ -15,18 +15,38 @@
   },
   {
     "id": "6767dea325d5493b6ffbbae5",
-    "permissions": ["View Subscriptions", "Create Subscriptions", "Delete Subscriptions", "Update Subscription", "View Movies"]
+    "permissions": [
+      "View Subscriptions",
+      "Create Subscriptions",
+      "Delete Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
   },
   {
     "id": "6771733a5e15b4405d789e35",
-    "permissions": ["View Subscriptions", "Create Subscriptions", "Delete Subscriptions", "Update Subscription", "View Movies"]
+    "permissions": [
+      "View Subscriptions",
+      "Create Subscriptions",
+      "Delete Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
   },
   {
     "id": "677173425e15b4405d789e36",
-    "permissions": ["Create Subscriptions", "Update Subscription", "View Movies"]
+    "permissions": [
+      "Create Subscriptions",
+      "Update Subscription",
+      "View Movies"
+    ]
   },
   {
     "id": "677aa7dfad739583b360492b",
-    "permissions": ["View Subscriptions", "Create Movies", "Delete Movies"]
+    "permissions": [
+      "View Subscriptions",
+      "Create Movies",
+      "Delete Movies"
+    ]
   }
 ]

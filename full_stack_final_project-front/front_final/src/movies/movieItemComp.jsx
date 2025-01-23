@@ -1,11 +1,10 @@
-import React, {useState} from "react"
-import {Box, List, ListItem, ListItemText, Typography, Button, Card, CardContent, CardMedia, Link} from "@mui/material"
-import dayjs from "dayjs"
-import {handleDeleteMovie} from "./movieAction"
+import React, { useState } from "react"
+import { Box, List, ListItem, ListItemText, Typography, Button, Card, CardContent, CardMedia } from "@mui/material"
+import { handleDeleteMovie } from "./movieAction"
 import UsersListComp from "../sharedComp/usersListComp"
-import {handleMovieClick} from "../subscriptions/subscriptionAction"
+import { handleMovieClick } from "../subscriptions/subscriptionAction"
 
-export default function MovieItemComp({movies, findStr, setEditClick, setActiveTab, setCurrentMovie}) {
+export default function MovieItemComp({ movies, findStr, setEditClick, setActiveTab, setCurrentMovie }) {
   const [value, setValue] = useState(false)
   return (
     <>
@@ -13,8 +12,8 @@ export default function MovieItemComp({movies, findStr, setEditClick, setActiveT
         {movies
           .filter(item => (findStr ? item.movie.name.toLowerCase().includes(findStr) : item.movie))
           .map((item, index) => (
-            <Box key={index} sx={{padding: 2}}>
-              <Card variant="outlined" sx={{border: 1}}>
+            <Box key={index} sx={{ padding: 2 }}>
+              <Card variant="outlined" sx={{ border: 1 }}>
                 <CardContent>
                   <ListItem
                     key={item.movie.id}
@@ -26,7 +25,7 @@ export default function MovieItemComp({movies, findStr, setEditClick, setActiveT
                   >
                     <ListItemText
                       primary={
-                        <Typography variant="h6" sx={{fontWeight: "bold"}}>
+                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                           {item.movie.name}, {new Date(item.movie.premiered).getFullYear()}
                         </Typography>
                       }
@@ -47,44 +46,24 @@ export default function MovieItemComp({movies, findStr, setEditClick, setActiveT
                         }}
                         image={item.movie.image}
                       />
-                      <Card variant="outlined" sx={{border: 1, objectFit: "contain"}}>
+                      <Card variant="outlined" sx={{ border: 1, objectFit: "contain" }}>
                         <CardContent name="CardContentCardContent">
                           <ListItemText
                             primary={
-                              <Typography variant="subtitle1" sx={{fontWeight: "bold"}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                                 Subsciptions watched
                               </Typography>
                             }
                           />
                           <UsersListComp userList={item.members} handleClick={handleMovieClick} setValue={setValue} />
-
-                          {/* {item.members.map((member, index) => {
-                            return (
-                              <List
-                                key={index}
-                                sx={{
-                                  display: "flex",
-                                  flexDirection: "column"
-                                }}
-                              >
-                                <ListItem>
-                                  <ListItemText
-                                    primary={<Link to="a">{member.name}</Link>}
-                                    secondary={dayjs(member.date).format("DD/MM/YYYY")}
-                                    sx={{display: "flex", gap: 2}}
-                                  />
-                                </ListItem>
-                              </List>
-                            )
-                          })} */}
                         </CardContent>
                       </Card>
                     </Box>
-                    <Box sx={{mt: 2}}>
+                    <Box sx={{ mt: 2 }}>
                       <Button
                         variant="contained"
                         size="small"
-                        sx={{mr: 1}}
+                        sx={{ mr: 1 }}
                         onClick={() => {
                           setEditClick(true)
                           setCurrentMovie(item.movie)

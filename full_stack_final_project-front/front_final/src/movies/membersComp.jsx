@@ -1,21 +1,7 @@
 import React from "react";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  Card,
-  CardContent,
-} from "@mui/material";
-import { useState, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 
 export default function MembersComp({ members }) {
-  useEffect(() => {
-    members.map((member) => {
-      console.log("members", member);
-    });
-  }, []);
 
   return (
     <>

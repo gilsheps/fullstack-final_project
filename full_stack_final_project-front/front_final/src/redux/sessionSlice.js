@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-  sessionTimeout: null, // Timeout in minutes
+  sessionTimeout: 0, // Timeout in minutes
   isCounting: false, // Whether the countdown is active
-  activeTab: "1",
+  loginTimestamp: 0,
 };
 
 const sessionSlice = createSlice({
@@ -11,29 +11,20 @@ const sessionSlice = createSlice({
   initialState,
   reducers: {
     setSessionTimeout: (state, action) => {
-      state.sessionTimeout = action.payload; // Set session timeout (in minutes)
-    },
-    startCountdown: (state) => {
-      state.isCounting = true; // Start the countdown
-    },
-    stopCountdown: (state) => {
-      state.isCounting = false; // Stop the countdown
+      state.sessionTimeout = action.payload.sessionTimeout; // Set session timeout (in minutes)
+      state.loginTimestamp = action.payload.loginTimestamp;
     },
     clearSession: (state) => {
-      state.sessionTimeout = null; // Clear session on logout
+      state.sessionTimeout = 0; // Clear session on logout
       state.isCounting = false;
     },
-    activeTabTab: (state, action) => {
-      state.activeTab = action.payload;
+    isSessionExpired: (state, action) => {
+      const currentTime = Date.now();
+      const timeoutDuration = parseInt(state.sessionTimeout, 10) * 60 * 1000; // Convert minutes to ms
+      return currentTime - parseInt(state.loginTimestamp, 10) > timeoutDuration;
     },
   },
 });
 
-export const {
-  setSessionTimeout,
-  startCountdown,
-  stopCountdown,
-  clearSession,
-  activeTabTab,
-} = sessionSlice.actions;
+export const {setSessionTimeout, clearSession, isSessionExpired} = sessionSlice.actions;
 export default sessionSlice.reducer;

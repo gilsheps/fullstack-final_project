@@ -1,6 +1,5 @@
 const Subscription = require("../models/subscriptionsModel");
-const Member = require("../models/membersModel");
-const { ObjectId } = require("mongodb");
+const {ObjectId} = require("mongodb");
 
 const createSubscription = async (subscription) => {
   console.log("subscription", subscription);
@@ -8,8 +7,8 @@ const createSubscription = async (subscription) => {
     {
       memberId: subscription.memberId,
     },
-    { $addToSet: { movies: { $each: subscription.movies } } },
-    { upsert: true }
+    {$addToSet: {movies: {$each: subscription.movies}}},
+    {upsert: true}
   );
   return updateSubscription;
 };
@@ -20,16 +19,14 @@ const getAllSubscription = async (filters) => {
 };
 
 const getSubscriptions = async () => {
-  return await Subscription.find()
-    .populate("memberId")
-    .populate("movies.movieId");
+  return await Subscription.find().populate("memberId").populate("movies.movieId");
 };
 
 const getMemberIdsByMovieId = async (movieId) => {
   try {
     const result = await Subscription.aggregate([
-      { $unwind: "$movies" },
-      { $match: { "movies.movieId": ObjectId.createFromHexString(movieId) } },
+      {$unwind: "$movies"},
+      {$match: {"movies.movieId": ObjectId.createFromHexString(movieId)}},
       {
         $project: {
           _id: 0,
@@ -41,10 +38,8 @@ const getMemberIdsByMovieId = async (movieId) => {
 
     const fullResult = await Promise.all(
       result.map(async (doc) => {
-        const name = await memeberService.getMemberByIdAndRetrunName(
-          doc.memberId._id
-        );
-        return { name, date: doc.date };
+        const name = await memeberService.getMemberByIdAndRetrunName(doc.memberId._id);
+        return {name, date: doc.date};
       })
     );
 

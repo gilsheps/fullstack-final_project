@@ -4,9 +4,6 @@ const router = express.Router();
 const permissions = require("../data/permissions.js");
 
 router.get("/", (req, res) => {
-  const { id } = req.query;
-  //   console.log("permissions", permissions, id);
-  //   const filteredData = permissions.filter((item) => item.id === id);
   res.json(permissions);
 });
 module.exports = router;

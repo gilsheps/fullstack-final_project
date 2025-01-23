@@ -1,16 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, SignInContainer } from "../shared-theme/CardAndContainer";
-import { Link } from "react-router-dom";
-import {
-  Box,
-  Button,
-  FormLabel,
-  FormControl,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 import api from "../utils/api.js";
 
 export default function RegisterComp() {

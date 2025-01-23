@@ -33,7 +33,7 @@ const getAllMembers = async (filters) => {
     {
       $group: {
         _id: "$memberId", // Group by memberId
-        memberDetails: { $first: "$memberDetails" }, // Include member details once
+        memberDetails: {$first: "$memberDetails"}, // Include member details once
         movies: {
           $push: {
             name: "$movieDetails.name", // Movie name
@@ -44,9 +44,7 @@ const getAllMembers = async (filters) => {
     },
   ]);
   const result = members.map((member) => {
-    const subscription = subscriptions.find(
-      (sub) => String(sub._id) === String(member._id)
-    );
+    const subscription = subscriptions.find((sub) => String(sub._id) === String(member._id));
     return {
       ...member.toObject(),
       movies: subscription ? subscription.movies : [],

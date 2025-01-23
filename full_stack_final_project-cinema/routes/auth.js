@@ -1,13 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userServices = require("../services/userService");
-const {createSecretToken} = require("../tokenGeneration/generateToken.js");
 const router = express.Router();
-const SECRET_KEY = "some_key";
-const TOKEN_EXPIRATION = "5m";
 const permissions = require("../data/permissions.json");
+const users = require("../data/users.json");
 
 // Login user
 router.post("/login", async (req, res) => {
@@ -17,11 +14,10 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({message: "All input is required"});
   }
   const user = await userServices.getUserByUsername(username);
-
   if (!user) {
     return res.status(404).json({message: "User not found"});
   }
-
+  console.log("password", password, "user.password", user.password);
   bcrypt.compare(password, user.password, (err, isMatch) => {
     if (err) {
       console.error(err);
@@ -29,25 +25,16 @@ router.post("/login", async (req, res) => {
     }
     if (isMatch) {
       console.log("Password matches!");
+      const timeout = users.find((item) => item.id === user._id.toString()).sessionTimeOut;
+      return res.json({
+        success: true,
+        message: "Login successful",
+        user: {id: user._id, username: user.username, sessionTimeOut: timeout},
+        permissions: permissions.find((permission) => permission.id === user._id.toString()).permissions,
+      });
     } else {
-      console.log("Password does not match!");
+      return res.status(401).send("Password does not match!");
     }
-  });
-  const token = createSecretToken(user._id);
-  // res.cookie("token", token, {
-  //   domain: process.env.frontend_url, // Set your domain here
-  //   path: "/", // Cookie is accessible from all paths
-  //   expires: TOKEN_EXPIRATION, //new Date(Date.now() + 86400000), // Cookie expires in 1 day
-  //   secure: true, // Cookie will only be sent over HTTPS
-  //   httpOnly: true, // Cookie cannot be accessed via client-side scripts
-  //   sameSite: "None",
-  // });
-  res.json({
-    success: true,
-    message: "Login successful",
-    user: {id: user._id, username: user.username},
-    token,
-    permissions: permissions.find((permission) => permission.id === user._id.toString()).permissions,
   });
 });
 
@@ -59,7 +46,7 @@ router.post("/register", async (req, res) => {
   if (user) {
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("hashedPassword", hashedPassword);
-    await userServices.firstLogin(username, password);
+    await userServices.firstLogin(username, hashedPassword);
     res.status(201).send(`User ${username} updated successfully`);
   } else {
     return res.status(400).json({message: `User ${username} not exists`});
