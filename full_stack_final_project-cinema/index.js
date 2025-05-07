@@ -5,6 +5,7 @@ const connectDB = require("./configs/db.js");
 const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT;
+const initDB = require("./configs/initDB.js")
 
 connectDB();
 
@@ -34,4 +35,5 @@ app.use("/api/subscriptions", subscriptionsRoutes);
 
 app.listen(PORT, () => {
   console.log(`app is listening at http://localhost:${PORT}`);
+  initDB()
 });

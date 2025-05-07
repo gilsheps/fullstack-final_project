@@ -7,16 +7,17 @@ const getAllUsers = async (filters) => {
   return users;
 };
 const getUserByUsername = async (username) => {
-  return await User.findOne({ username });
+  console.log("getUserByUsername", username);
+  return await User.findOne({username});
 };
 
 const addUser = async (username, password) => {
-  const user = new User({ username, password });
+  const user = new User({username, password});
   return await user.save();
 };
 
 const updateUser = async (id, updatedUser) => {
-  return await User.findByIdAndUpdate(id, updatedUser, { new: true });
+  return await User.findByIdAndUpdate(id, updatedUser, {new: true});
 };
 
 const deleteUser = async (id) => {
@@ -24,9 +25,9 @@ const deleteUser = async (id) => {
 };
 
 const firstLogin = async (username, password) => {
-  console.log('firstLogin', username, password)
-  const filter = { username: username };
-  const update = { password: password };
+  console.log("firstLogin", username, password);
+  const filter = {username: username};
+  const update = {password: password};
   return await User.findOneAndUpdate(filter, update, {
     new: true,
   });

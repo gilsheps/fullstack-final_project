@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const userServices = require("../services/userService");
 const router = express.Router();
 const permissions = require("../data/permissions.json");
